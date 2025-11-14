@@ -25,7 +25,7 @@ SECRET_KEY = 'enter secret key'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "70.34.245.3", "sonderhomefeeling.com", "www.sonderhomefeeling.com"]
+ALLOWED_HOSTS = ["enter your hosts"]
 
 
 # Application definition
