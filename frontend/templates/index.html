@@ -1,0 +1,272 @@
+{% load static %}
+{% load cropping %}
+<!DOCTYPE html>
+<html data-wf-page="687e6e3a866f32e2805fd768" data-wf-site="687e6e3a866f32e2805fd757">
+<head>
+    <meta charset="utf-8">
+    <title>Sonder</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="Webflow" name="generator">
+    <link href="{% static 'css/normalize.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/webflow.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/sonderhomefeeling.webflow.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mobile.css' %}">
+    <script type="text/javascript"> !function (o, c) {
+        var n = c.documentElement, t = " w-mod-";
+        n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
+    }(window, document); </script>
+    {% load static %}
+    <link href="{% static 'images/favicon.png' %}" rel="shortcut icon" type="image/x-icon">
+    <link href="{% static 'images/webclip.png' %}" rel="apple-touch-icon">
+</head>
+<body class="body">
+{% include "partials/catalog_menu.html" %}
+<section class="home-page">
+
+    {% if home and home.hero_image %}
+        {% cropped_thumbnail home "hero_crop" upscale=True as hero_url %}
+    {% endif %}
+    {% firstof hero_url home.hero_image.url as bg_url %}
+
+    <div class="w-layout-grid home"
+            {% if bg_url %}
+         style="background-image:url('{{ bg_url }}');
+                 background-size:cover;
+                 background-position:center;
+                 background-repeat:no-repeat;"
+            {% endif %}>
+
+
+        <div id="w-node-_289c0a96-4a9c-8ad7-4cf5-a630a36153b7-805fd768" class="w-layout-grid header">
+            <div id="w-node-_08ccf2cb-400e-fe0a-29b5-eaba8834d78c-805fd768" class="menu"><a
+                    href="{% url 'shop:catalog' %}" class="text-block-catalog">КАТАЛОГ</a></div>
+            <div id="w-node-badcbf80-72ad-091a-4b9d-4b03e71197ce-805fd768" class="sonder-logo-1"><img
+                    src="{% static 'images/sonder-logo-3.svg' %}" loading="lazy" width="100" height="Auto" alt="">
+            </div>
+            <div id="w-node-_3e2ae8a0-a4bd-84c1-db00-0c55b151e4f6-805fd768" class="icons"><a
+                    data-w-id="ec2ff70c-6510-f2e9-f969-fcc0faa97860" href="#" class="search w-inline-block"> <img
+                    src="{% static 'images/search.svg' %}" loading="lazy" alt=""> </a> <a
+                    data-w-id="fc30710d-3adc-f240-ec55-2ea83edded25" href="#" class="cart w-inline-block"> <img
+                    src="{% static 'images/cart.svg' %}" loading="lazy" alt=""> </a></div>
+        </div>
+        <div id="w-node-bd7ea57f-1c0d-122e-4d68-72a3da244e48-805fd768" class="home-info-wrap">
+            <div id="w-node-_7454d4d5-a376-3278-2c54-45cfc50cdb96-805fd768" class="hiw-text-wrap">
+                <div id="w-node-_16449922-21c4-ae51-0a49-5bf1c96efb88-805fd768" class="text-block-little-moments">
+                    Little
+                    moments &amp; special feelings
+                </div>
+                <div id="w-node-_38a68174-bcbf-5897-ebc6-bf5da438cbd8-805fd768"
+                     class="text-block-ceramics-for-home">
+                    Керамика для дома
+                </div>
+            </div>
+            <a id="w-node-d4356fd3-2eae-d80a-79d5-66b76040aa62-805fd768"
+               data-w-id="d4356fd3-2eae-d80a-79d5-66b76040aa62" href="{% url 'shop:catalog' %}"
+               class="choose w-inline-block">
+                <div class="text-block-select-product">ВЫБРАТЬ ИЗДЕЛИЕ</div>
+            </a></div>
+    </div>
+    {# ...верх страницы без изменений #}
+    <div class="new-bestsellers">
+        <div class="w-layout-grid header-2">
+            <div class="text-block-new-bestsellers">Новинки &amp; бестселлеры</div>
+            <div class="link-arrow">
+                <a href="{% url 'shop:catalog' %}" class="link-arrow-wrap w-inline-block">
+                    <img src="{% static 'images/stash_arrow-up-light.svg' %}" loading="lazy" alt=""
+                         class="link-arrow-img">
+                </a>
+            </div>
+        </div>
+
+        <div class="product-list-1">
+            <div class="w-layout-grid grid-product-1">
+                {% for p in home_new_products %}
+                    <div class="product-1">
+                        <a href="{{ p.get_absolute_url }}" class="img-product-1 w-inline-block">
+                            {% if p.image %}
+                                <img src="{{ p.image.url }}" loading="lazy" alt="{{ p.name }}">
+                            {% else %}
+                                <img src="{% static 'images/placeholder.jpg' %}" loading="lazy" alt="{{ p.name }}">
+                            {% endif %}
+                        </a>
+
+                        <div class="info-product-1">
+                            <div class="about-product-1">
+                                <div class="text-block-73">{{ p.name }}</div>
+                                <div class="text-block-74">{{ p.price_byn }} BYN</div>
+                            </div>
+                            <div class="cart-product-1">
+                                <a href="#"
+                                   class="add-product-link-wrap-1 w-inline-block"
+                                   data-product-id="{{ p.id }}"
+                                   aria-label="Добавить в корзину">
+                                    <img src="{% static 'images/cartblack.svg' %}" loading="lazy" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p style="opacity:.7;">Пока нет новинок. Отметь несколько товаров флажком «Новинка».</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="w-layout-grid header-3">
+        <div class="text-block-catalog-1">Каталог</div>
+        <div class="link-arow-1"><a href="{% url 'shop:catalog' %}" class="link-arrow-wrap-2 w-inline-block"> <img
+                src="{% static 'images/stash_arrow-up-light.svg' %}" loading="lazy" alt="" class="link-arrow-img-1">
+        </a></div>
+    </div>
+    <div class="catalog-on-home-page">
+        <div class="w-layout-grid quck-review-catalog">
+
+            {% if featured_blocks %}
+                {% for b in featured_blocks %}
+                    {% with '' as bg_url %}
+                        {% if b.crop %}
+                            {# получаем урл нарезанного изображения по имени поля кропа #}
+                            {% cropped_thumbnail home b.crop upscale=True as bg_url %}
+                        {% endif %}
+                        <a href="{% url 'shop:catalog' %}?section={{ b.slug }}"
+                           class="{% if forloop.counter == 1 %}quick-block-n4{% elif forloop.counter == 2 %}quick-block-n5{% else %}quick-block-n6{% endif %} w-inline-block"
+                           style="background-image:url('{{ bg_url|default:b.image }}');">
+                            <div class="text-block-14">{{ b.title }}</div>
+                        </a>
+                    {% endwith %}
+                {% endfor %}
+            {% else %}
+                {# фоллбек как раньше #}
+                <a href="{% url 'shop:catalog' %}" class="quick-block-n4 w-inline-block">
+                    <div class="text-block-14">Посуда</div>
+                </a>
+                <a href="{% url 'shop:catalog' %}" class="quick-block-n5 w-inline-block">
+                    <div class="text-block-15">Декор</div>
+                </a>
+                <a href="{% url 'shop:catalog' %}" class="quick-block-n6 w-inline-block">
+                    <div class="text-block-16">Свечи</div>
+                </a>
+            {% endif %}
+
+        </div>
+    </div>
+
+
+    <div class="footer">
+        <div class="footer-grid-with-content">
+            <div class="img-wrap-n4"><img src="{% static 'images/g14.svg' %}" loading="lazy" alt=""></div>
+            <div id="w-node-ee80efd6-0bb0-5e8d-b5e7-43070a1c085d-805fd768" class="text-wrap-footer-n1">
+                <div class="text-block-17">Курилович Дарья Дмитриевна<br>УНП: АЕ5619669</div>
+                <div class="text-block-18">ⓒ All rights reserved.</div>
+            </div>
+            <div id="w-node-a82bbfd1-ac1f-e0ad-d2d7-347db1850824-805fd768" class="text-wrap-footer-n2">
+                <div id="w-node-_17a1545b-ba7e-a42f-cb4f-44bde32abcf9-805fd768" class="about-us-text-wrap"><a
+                        href="{% url 'shop:about' %}" class="text-block-19">О нас</a></div>
+                <div id="w-node-_5ed9e224-78ed-3dc4-bb6a-a69ad7bb895c-805fd768" class="contact-text-wrap"><a
+                        href="{% url 'shop:contact' %}" class="text-block-20">Контакты</a></div>
+                <div id="w-node-_8bcea6e9-38db-b29a-111c-1dfab896c030-805fd768" class="delivery-text-wrap"><a
+                        href="{% url 'shop:delivery' %}" class="text-block-21">Доставка и оплата</a></div>
+            </div>
+            <div id="w-node-_3702ab96-155f-836d-dc03-e78a3e7920fc-805fd768" class="text-wrap-footer-n3">
+                <div class="footer-links"><a href="https://t.me/sonderhomefeeling" target="_blank"
+                                             class="telegram-link w-inline-block"> <img
+                        src="{% static 'images/ph_telegram-logo-light.svg' %}" loading="lazy" alt=""> </a> <a
+                        href="https://www.instagram.com/sonder.homefeeling/" target="_blank"
+                        class="instagram-link w-inline-block"> <img
+                        src="{% static 'images/ph_instagram-logo-light.svg' %}" loading="lazy" alt=""> </a></div>
+                <div id="w-node-_0cd4c3db-912a-e4d8-06f1-16b8621c4d2d-805fd768" class="text-block-22">Тимирязева
+                    65Б,
+                    пом. 903 Минск, Беларусь
+                </div>
+            </div>
+        </div>
+        <div class="img-wrap-footer">
+            <picture>
+                <!-- Мобайл -->
+                <source media="(max-width: 767px)"
+                        srcset="{% static 'images/group-994.svg' %}?v=1">
+                <!-- Десктоп (и всё, что >767px) -->
+                <img class="footer-art"
+                     src="{% static 'images/illustration.svg' %}?v=1"
+                     alt="Sonder footer illustration">
+            </picture>
+        </div>
+    </div>
+</section> <!-- Модалка поиска --> {% include "partials/search_window.html" %}
+<!-- Модалка корзины --> {% include "partials/cart_window.html" %} <!-- JS -->
+<script src="{% static 'js/cart-mini.js' %}"></script>
+<script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=687e6e3a866f32e2805fd757"
+        type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>
+<script src="{% static 'js/webflow.js' %}"></script>
+<script src="{% static 'js/search-mini.js' %}"></script>
+<script>
+    // пробрасываем URL, чтобы не хардкодить в скрипте
+    window.__CART_ADD_URL__ = "{% url 'shop:cart_add' %}";
+
+    // — CSRF из cookie
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+    }
+
+    const CSRF = getCookie('csrftoken');
+
+    // — POST /cart/add/
+    async function addToCart(productId, qty) {
+        const resp = await fetch(window.__CART_ADD_URL__, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': CSRF,
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: new URLSearchParams({product_id: String(productId), qty: String(qty || 1)})
+        });
+        if (!resp.ok) throw new Error('network');
+        const data = await resp.json();
+        if (!data.ok) throw new Error('server');
+
+        // обновим бейдж
+        const badge = document.querySelector('[data-role="cart-count"], #cart-counter');
+        if (badge && typeof data.count !== 'undefined') {
+            badge.textContent = data.count;
+            badge.style.display = data.count > 0 ? '' : 'none';
+        }
+        return data;
+    }
+
+    // — клики по .add-product-link-wrap-1 (иконка корзины в карточке)
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.add-product-link-wrap-1[data-product-id]');
+        if (!btn) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (btn.dataset.busy === '1') return;   // защита от дабл-клика
+        btn.dataset.busy = '1';
+
+        const pid = btn.getAttribute('data-product-id');
+        if (!pid) {
+            btn.dataset.busy = '0';
+            return;
+        }
+
+        btn.classList.add('adding');
+
+        addToCart(pid, 1)
+            .then(() => {
+                btn.classList.add('ping');          // микро-анимация
+                setTimeout(() => btn.classList.remove('ping'), 600);
+            })
+            .catch(console.error)
+            .finally(() => {
+                btn.classList.remove('adding');
+                btn.dataset.busy = '0';
+            });
+    });
+</script>
+<script src="{% static 'js/catalog_menu.js' %}?v=2"></script>
+</body>
+</html>

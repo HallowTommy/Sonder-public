@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cropping %}
+
+{% block title %}Catalog{% endblock %}
+{% block og_title %}Catalog{% endblock %}
+{% block twitter_title %}Catalog{% endblock %}
+{% block body_class %}body-2{% endblock %}
+
+{# слева в шапке ссылка «ГЛАВНАЯ» #}
+{% block header_left %}
+    <a href="{% url 'shop:home' %}" class="text-block-27">ГЛАВНАЯ</a>
+{% endblock %}
+
+{% block content %}
+    <section id="catalog" class="catalog-page">
+
+        <div class="catalog-menu">
+            {# 1) сначала — Новинки #}
+            <div class="section-new-items">
+                <a href="{% url 'shop:catalog' %}?section=new"
+                   class="new-items-text {% if current_tab == 'new' %}tab-active{% endif %}">
+                    НОВИНКИ
+                </a>
+            </div>
+
+            {# 2) затем — корневые разделы по position/name #}
+            {% for sec in sections %}
+                <div class="section-{{ sec.slug }}">
+                    <a href="{% url 'shop:catalog' %}?section={{ sec.slug }}"
+                       class="{{ sec.slug }}-text {% if current_section and current_section.slug == sec.slug %}tab-active{% endif %}">
+                        {{ sec.name|upper }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="dishes-catalog">
+
+            {# баннер секции или новинок #}
+            {% if current_section %}
+                {% if current_section.banner_image %}
+                    {% cropped_thumbnail current_section "banner_crop" upscale=True as banner_url %}
+                {% endif %}
+                <div class="banner banner--centered"
+                        {% if current_section.banner_image %}
+                     style="background-image:url('{{ banner_url|default:current_section.banner_image.url }}');background-size:cover;background-position:center;"
+                        {% endif %}>
+                    <div class="banner-text">
+                        {{ current_section.banner_text|default:''|linebreaksbr }}
+                    </div>
+                </div>
+            {% elif current_tab == 'new' and new_settings %}
+                {% if new_settings.banner_image %}
+                    {% cropped_thumbnail new_settings "banner_crop" upscale=True as banner_url %}
+                {% endif %}
+                <div class="banner banner--centered"
+                        {% if new_settings.banner_image %}
+                     style="background-image:url('{{ banner_url|default:new_settings.banner_image.url }}');background-size:cover;background-position:center;"
+                        {% endif %}>
+                    <div class="banner-text">
+                        {{ new_settings.banner_text|default:''|linebreaksbr }}
+                    </div>
+                </div>
+            {% endif %}
+
+            {# под-вкладки (категории) и сортировка #}
+            <div class="product-type-menu">
+                <div class="w-layout-grid product-type-grid">
+                    <div class="wrap-product-type-menu">
+                        <div class="wrap-2-product-type-menu">
+                            {% if current_section %}
+                                <a href="{% url 'shop:catalog' %}?section={{ current_section.slug }}"
+                                   class="product-all {% if not current_category %}subtab-active{% endif %}">
+                                    Все
+                                </a>
+                                {% for c in categories %}
+                                    <a href="{% url 'shop:catalog' %}?section={{ current_section.slug }}&category={{ c.slug }}"
+                                       class="product-{{ c.slug }} {% if current_category and current_category.slug == c.slug %}subtab-active{% endif %}">
+                                        {{ c.name }}
+                                    </a>
+                                {% endfor %}
+                            {% elif current_tab == 'new' %}
+                                <a href="{% url 'shop:catalog' %}?section=new" class="product-all subtab-active">Все</a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <form class="sorting-btn" method="get">
+                        <details class="sort-details sort--card">
+                            <summary class="sorting-wrap">
+              <span class="text-block-88 {% if request.GET.sort %}sorting-active{% endif %}">
+                {% with s=request.GET.sort %}
+                    {% if s == 'newest' %}Сначала новые
+                    {% elif s == 'oldest' %}Сначала старые
+                    {% elif s == 'price_desc' %}Сначала дорогие
+                    {% elif s == 'price_asc' %}Сначала дешевые
+                    {% else %}Сортировать по{% endif %}
+                {% endwith %}
+              </span>
+                                <img src="{% static 'images/iconamoon_sorting-center-thin.svg' %}" loading="lazy" alt=""
+                                     class="sort-arrow">
+                            </summary>
+                            <div class="sort-menu">
+                                <button type="submit" name="sort" value="newest" class="sort-item">Сначала новые
+                                </button>
+                                <button type="submit" name="sort" value="oldest" class="sort-item">Сначала старые
+                                </button>
+                                <button type="submit" name="sort" value="price_desc" class="sort-item">Сначала дорогие
+                                </button>
+                                <button type="submit" name="sort" value="price_asc" class="sort-item">Сначала дешевые
+                                </button>
+                            </div>
+                        </details>
+
+                        {# сохраняем текущие фильтры при смене сортировки #}
+                        {% if current_section %}
+                            <input type="hidden" name="section" value="{{ current_section.slug }}">
+                        {% elif current_tab == 'new' %}
+                            <input type="hidden" name="section" value="new">
+                        {% endif %}
+                        {% if current_category %}
+                            <input type="hidden" name="category" value="{{ current_category.slug }}">
+                        {% endif %}
+                        {% if products.number %}
+                            <input type="hidden" name="page" value="{{ products.number }}">
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+
+            {# карточки товаров #}
+            <div class="product-list-1">
+                <div class="w-layout-grid grid-product-1">
+                    {% for p in products %}
+                        <div class="product-1">
+                            <a href="{{ p.get_absolute_url }}" class="img-product-1 w-inline-block">
+                                {% if p.photos.all %}
+                                    {% with ph=p.photos.all.0 %}
+                                        <img src="{% cropped_thumbnail ph 'image_crop' %}"
+                                             loading="lazy"
+                                             alt="{{ ph.alt|default:p.name }}">
+                                    {% endwith %}
+                                {% elif p.image %}
+                                    <img src="{{ p.image.url }}" loading="lazy" alt="{{ p.name }}">
+                                {% else %}
+                                    <img src="{% static 'images/placeholder.jpg' %}" loading="lazy" alt="{{ p.name }}">
+                                {% endif %}
+                            </a>
+
+                            <div class="info-product-1">
+                                <div class="about-product-1">
+                                    <div class="text-block-73">{{ p.name }}</div>
+                                    <div class="text-block-74">{{ p.price_byn }} BYN</div>
+                                </div>
+                                <div class="cart-product-1">
+                                    <a href="#"
+                                       class="add-product-link-wrap-1 w-inline-block"
+                                       data-product-id="{{ p.id }}"
+                                       aria-label="Добавить в корзину">
+                                        <img src="{% static 'images/cartblack.svg' %}" loading="lazy" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="text-block-73">Товаров пока нет</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {# пагинация #}
+            <div class="pagination">
+                <div class="w-layout-grid pagination-grid">
+                    {% if products.has_previous %}
+                        <a class="left-stroke w-inline-block"
+                           href="?page={{ products.previous_page_number }}{% if current_section %}&section=
+                               {{ current_section.slug }}{% elif current_tab == 'new' %}&section=new{% endif %}{% if current_category %}&category={{ current_category.slug }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+                            <img src="{% static 'images/Vector-335-Stroke-2.svg' %}" loading="lazy" width="12" alt="">
+                        </a>
+                    {% endif %}
+
+                    <span class="_1st-page-on-catalog w-inline-block">
+          <div class="text-block-38">{{ products.number }} / {{ products.paginator.num_pages }}</div>
+        </span>
+
+                    {% if products.has_next %}
+                        <a class="right-stroke w-inline-block"
+                           href="?page={{ products.next_page_number }}{% if current_section %}&section=
+                               {{ current_section.slug }}{% elif current_tab == 'new' %}&section=new{% endif %}{% if current_category %}&category={{ current_category.slug }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">
+                            <img src="{% static 'images/Vector-335-Stroke.svg' %}" loading="lazy" width="12" alt="">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        // CSRF из cookie
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+        }
+
+        const CSRF = getCookie('csrftoken');
+
+        // Добавление в корзину (qty=1)
+        async function addToCart(productId, qty) {
+            const resp = await fetch("{% url 'shop:cart_add' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': CSRF,
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+                },
+                body: new URLSearchParams({product_id: String(productId), qty: String(qty || 1)})
+            });
+            if (!resp.ok) throw new Error('network');
+            const data = await resp.json();
+            if (!data.ok) throw new Error('server');
+
+            const badge = document.querySelector('[data-role="cart-count"], #cart-counter');
+            if (badge && typeof data.count !== 'undefined') {
+                badge.textContent = data.count;
+                badge.style.display = data.count > 0 ? '' : 'none';
+            }
+            return data;
+        }
+
+        // Единый обработчик клика + защита от двойного нажатия
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.add-product-link-wrap-1[data-product-id]');
+            if (!btn) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (btn.dataset.busy === '1') return;
+            btn.dataset.busy = '1';
+
+            const pid = btn.getAttribute('data-product-id');
+            if (!pid) {
+                btn.dataset.busy = '0';
+                return;
+            }
+
+            btn.classList.add('adding');
+
+            addToCart(pid, 1)
+                .then(() => {
+                    btn.classList.add('ping');
+                    setTimeout(() => btn.classList.remove('ping'), 600);
+                })
+                .catch(console.error)
+                .finally(() => {
+                    btn.classList.remove('adding');
+                    btn.dataset.busy = '0';
+                });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+{% load l10n %}
+
+{% block title %}Contact{% endblock %}
+{% block body_class %}body-3 nav-dark{% endblock %}
+
+{# при желании можно поменять левую ссылку в шапке #}
+{% block header_left %}
+  <a href="{% url 'shop:catalog' %}" class="text-block-27">КАТАЛОГ</a>
+{% endblock %}
+
+{% block content %}
+<section class="contact-section">
+  <div class="contact-about-block">
+    <div class="ca-text-wrap">
+      <div class="text-block-120">{{ contact.title|default:"КОНТАКТЫ" }}</div>
+
+      <div class="catw-grid">
+        <div class="text-block-121">
+          {{ contact.address_text|linebreaksbr }}
+        </div>
+
+        <div class="catw-contact-wrap">
+          <div class="catw-inst">
+            <img src="{% static 'images/ph_instagram-logo-light.svg' %}" loading="lazy" alt="">
+            {% if contact.instagram_url %}
+              <a href="{{ contact.instagram_url }}" target="_blank" class="text-block-122">
+                {{ contact.instagram_username|default:"sonder.homefeeling" }}
+              </a>
+            {% else %}
+              <div class="text-block-122">{{ contact.instagram_username|default:"sonder.homefeeling" }}</div>
+            {% endif %}
+          </div>
+
+          <div class="catw-mail">
+            <img src="{% static 'images/Group-209.svg' %}" loading="lazy" alt="">
+            {% if contact.email %}
+              <a href="#" class="text-block-123 js-copy-email"
+                 data-email="{{ contact.email }}"
+                 title="Скопировать e-mail">{{ contact.email }}</a>
+            {% else %}
+              <div class="text-block-123">—</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ca-img-wrap" id="map-container"
+         data-lat="{{ contact.map_lat|unlocalize }}"
+         data-lng="{{ contact.map_lng|unlocalize }}"
+         data-zoom="{{ contact.map_zoom|default:16 }}">
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  {# Яндекс.Карты — подключаем только когда есть ключ и координаты #}
+  {% if ymaps_key and contact.map_lat and contact.map_lng %}
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={{ ymaps_key }}"></script>
+    <script>
+      (function () {
+        var node = document.getElementById('map-container');
+        if (!node) return;
+
+        function num(v){ return parseFloat(String(v).replace(',', '.')); }
+
+        var lat = num(node.dataset.lat);
+        var lng = num(node.dataset.lng);
+        var zoom = parseInt(node.dataset.zoom || 16, 10);
+        if (isNaN(lat) || isNaN(lng)) return;
+
+        ymaps.ready(function () {
+          var map = new ymaps.Map(node, {center: [lat, lng], zoom: zoom, controls: []});
+          map.behaviors.disable(['scrollZoom', 'multiTouch']);
+          var pm = new ymaps.Placemark([lat, lng], {}, {
+            iconLayout: 'default#image',
+            iconImageHref: '{% static "images/pin-black.svg" %}',
+            iconImageSize: [34, 46],
+            iconImageOffset: [-17, -46]
+          });
+          map.geoObjects.add(pm);
+        });
+      })();
+    </script>
+  {% endif %}
+
+  <script>
+    (function () {
+      const SELECTOR = '.js-copy-email';
+
+      function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text);
+        }
+        return new Promise((resolve, reject) => {
+          try {
+            const ta = document.createElement('textarea');
+            ta.value = text; ta.style.position='fixed'; ta.style.left='-9999px';
+            document.body.appendChild(ta); ta.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            ok ? resolve() : reject(new Error('copy failed'));
+          } catch (e) { reject(e); }
+        });
+      }
+
+      document.addEventListener('click', async (e) => {
+        const el = e.target.closest(SELECTOR);
+        if (!el) return;
+        e.preventDefault();
+
+        const email = el.getAttribute('data-email') || el.textContent.trim();
+        const original = el.textContent;
+
+        try {
+          await copyToClipboard(email);
+          el.textContent = 'Скопировано';
+          el.classList.add('copied');
+          setTimeout(() => { el.textContent = original; el.classList.remove('copied'); }, 1200);
+        } catch {
+          window.location.href = 'mailto:' + email;
+        }
+      });
+    })();
+  </script>
+{% endblock %}

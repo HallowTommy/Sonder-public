@@ -1,0 +1,34 @@
+sonderhomefeeling.com, www.sonderhomefeeling.com {
+    encode zstd gzip
+    log
+
+    handle_path /static/* {
+        root * /app/staticfiles
+        file_server
+    }
+
+    handle_path /media/* {
+        root * /app/media
+        file_server
+    }
+
+    # => ссылки на бэкапы скачиваются сразу
+    @backups path /backups/*
+    @archives path *.tar.gz *.tgz *.zip *.dump
+    handle @backups {
+        root * /var/www/sonder-backups
+
+        # форсим скачивание
+        header @archives Content-Type application/octet-stream
+        header @archives Content-Disposition "attachment"
+
+        # на всякий случай
+        header {
+            X-Content-Type-Options "nosniff"
+        }
+
+        file_server browse off
+    }
+
+    reverse_proxy web:8000
+}

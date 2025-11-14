@@ -1,0 +1,1168 @@
+/* ================================
+   КАТАЛОГ — подкатегории: "Все, Кружки, ..."
+==================================*/
+.catalog-page .wrap-2-product-type-menu a,
+.catalog-page .wrap-2-product-type-menu a:visited {
+    color: inherit !important;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.catalog-page .wrap-2-product-type-menu a:hover {
+    text-decoration: underline;
+}
+
+.catalog-page .wrap-2-product-type-menu a.subtab-active {
+    font-weight: 700;
+}
+
+/* ================================
+   КАТАЛОГ — верхние вкладки (ПОСУДА/ДЕКОР/СВЕЧИ/НОВИНКИ)
+==================================*/
+.catalog-page .catalog-menu a,
+.catalog-page .catalog-menu a:visited {
+    color: inherit !important;
+    text-decoration: none;
+}
+
+.catalog-page .catalog-menu a:hover {
+    text-decoration: underline;
+}
+
+.catalog-page .catalog-menu a.tab-active {
+    font-weight: 700;
+}
+
+/* ================================
+   Нативный select (если где-то используешь)
+==================================*/
+.sort-select {
+    background: transparent;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.sort-select:focus {
+    outline: none;
+}
+
+/* ================================
+   КАТАЛОГ — выпадающее меню "Сортировать по"
+   (<details>/<summary>), вариант CARD
+==================================*/
+.catalog-page .sort-details {
+    position: relative;
+    display: inline-block;
+}
+
+.catalog-page .sorting-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    cursor: pointer;
+}
+
+.catalog-page .sorting-wrap::-webkit-details-marker {
+    display: none;
+}
+
+/* убираем маркер */
+.catalog-page .sorting-wrap {
+    list-style: none;
+}
+
+.catalog-page .sort-arrow {
+    transition: transform .2s ease;
+}
+
+.catalog-page .sort-details[open] .sort-arrow {
+    transform: rotate(180deg);
+}
+
+.catalog-page .sort-menu {
+    display: none;
+}
+
+.catalog-page .sort-details[open] .sort-menu {
+    display: block;
+}
+
+.catalog-page .sort--card .sort-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    min-width: 240px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+    border-radius: 0;
+    padding: 6px;
+    z-index: 50;
+}
+
+.catalog-page .sort--card .sort-item {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    padding: 10px 12px;
+    border-radius: 0;
+}
+
+.catalog-page .sort--card .sort-item:hover,
+.catalog-page .sort--card .sort-item:focus {
+    background: rgba(0, 0, 0, .05);
+    text-decoration: none;
+    outline: none;
+}
+
+.catalog-page .sorting-active {
+    font-weight: 700;
+}
+
+/* «Сортировать по» становится жирным при выборе */
+.catalog-page .sorting-btn .sorting-wrap .text-block-88 {
+    text-decoration: none;
+}
+
+.catalog-page .sorting-btn .sorting-wrap:hover .text-block-88 {
+    text-decoration: underline;
+}
+
+/* ================================
+   ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+==================================*/
+:root {
+    /* карточки каталога/слайдера */
+    --product-ar: 4/5;
+    --product-radius: 0px;
+
+    /* миниатюры слева на странице товара */
+    --thumb-inset: 20px; /* отступ от «чёрных линий» */
+    --thumb-gap: 16px; /* расстояние между миниатюрами */
+    --thumb-height: 200px; /* фиксированная высота превью (desktop) */
+    --thumb-radius: 0px;
+}
+
+/* ================================
+   КАТАЛОГ — картинка карточки товара
+==================================*/
+.img-product-1 {
+    display: block;
+    aspect-ratio: var(--product-ar);
+    overflow: hidden;
+    border-radius: var(--product-radius);
+}
+
+.img-product-1 img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* ================================
+              БАННЕР
+==================================*/
+
+.catalog-page .banner,
+.catalog-page .banner-2 {
+    height: 260px !important;
+    display: grid !important;
+    place-items: center !important;
+    text-align: center;
+}
+
+.catalog-page .banner .text-wrap,
+.catalog-page .banner .text-wrap-2,
+.catalog-page .banner-2 .text-wrap,
+.catalog-page .banner-2 .text-wrap-2 {
+    position: static !important;
+}
+
+.catalog-page .banner .banner-text,
+.catalog-page .banner-2 .banner-text,
+.catalog-page .banner-2 .banner-text-2 {
+    width: min(449px, 92vw) !important; /* держим «прежнюю» ширину, но адаптивно */
+    max-width: 449px !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    white-space: normal !important; /* на случай где-то стоит nowrap */
+    overflow-wrap: anywhere; /* чтобы не торчало на узких экранах */
+}
+
+/* ================================
+   CHECKOUT — дропдауны (единый вид)
+==================================*/
+:root {
+    --dd-row-h: 40px; /* высота строки в списке */
+}
+
+/* Базовые контейнеры всех дропдаунов на чек-ауте */
+.checkout-page .contact-info .w-dropdown {
+    position: relative;
+}
+
+.checkout-page .contact-info .w-dropdown-toggle {
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--dd-row-h);
+    padding: 8px 12px;
+}
+
+/* Любой input внутри «большой коробки» и лейбл доставки */
+/* стало: и для блока самовывоза тоже */
+.checkout-page .contact-info .dropdown-input,
+.checkout-page .contact-info-pick-up .dropdown-input,
+.checkout-page .contact-info [data-role="delivery-label"] {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    padding: 0;
+    outline: none;
+    min-height: var(--dd-row-h);
+}
+
+/* Стрелка: базовое выравнивание и анимация (для всех трёх) */
+.checkout-page .contact-info #dd-country .w-icon-dropdown-toggle,
+.checkout-page .contact-info #dd-delivery-method .w-icon-dropdown-toggle {
+    margin-left: auto;
+    transition: transform .2s ease;
+}
+
+/* Поворот стрелки при открытии (для всех трёх) */
+#dd-country.w--open .w-icon-dropdown-toggle,
+#dd-country .w-dropdown-toggle[aria-expanded="true"] .w-icon-dropdown-toggle,
+#dd-delivery-method.w--open .w-icon-dropdown-toggle,
+#dd-delivery-method .w-dropdown-toggle[aria-expanded="true"] .w-icon-dropdown-toggle {
+    transform: rotate(180deg);
+}
+
+/* Пункты меню (для всех трёх) */
+.checkout-page .contact-info #dd-country .w-dropdown-link,
+.checkout-page .contact-info #dd-delivery-method .w-dropdown-link {
+    display: block;
+    width: 100%;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    padding: 10px 12px;
+    line-height: calc(var(--dd-row-h) - 20px);
+    cursor: pointer;
+}
+
+.checkout-page .contact-info #dd-country .w-dropdown-link:hover,
+.checkout-page .contact-info #dd-delivery-method .w-dropdown-link:hover,
+.checkout-page .contact-info #dd-country .w-dropdown-link.is-active,
+.checkout-page .contact-info #dd-delivery-method .w-dropdown-link.is-active {
+    background: #f2f2f2;
+}
+
+/* Чтобы списки перекрывали соседние блоки */
+.checkout-page .contact-info .country-choose,
+.checkout-page .contact-info .city-choose,
+.checkout-page .contact-info .delivery-method-choose {
+    position: relative;
+    z-index: 1;
+}
+
+/* ================================
+   Портал выпадающих списков (единый)
+==================================*/
+.dropdown-portal {
+    position: fixed; /* к вьюпорту */
+    z-index: 9999;
+    display: none;
+    background: #fff;
+    box-sizing: border-box;
+    max-height: calc(5 * var(--dd-row-h));
+    overflow: auto;
+
+    /* ломаем навязанный Webflow right/min-width */
+    right: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+.dropdown-portal.w--open {
+    display: block;
+}
+
+.dropdown-portal .w-dropdown-link {
+    display: block;
+    width: 100%;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    padding: 10px 12px;
+    line-height: calc(var(--dd-row-h) - 20px);
+    cursor: pointer;
+}
+
+.dropdown-portal .w-dropdown-link:hover,
+.dropdown-portal .w-dropdown-link.is-active {
+    background: #f2f2f2;
+}
+
+/* было: cursor:text на всей коробке */
+.checkout-page .contact-info .input-wrap,
+.checkout-page .contact-info-pick-up .input-wrap {
+    display: flex;
+    align-items: center;
+    min-height: var(--dd-row-h);
+    padding: 8px 12px;
+    background: transparent;
+    cursor: default;
+}
+
+/* курсор-каретка только на самом инпуте */
+.checkout-page .contact-info .input-wrap .dropdown-input,
+.checkout-page .contact-info-pick-up .input-wrap .dropdown-input {
+    width: 100%;
+    cursor: text;
+}
+
+.checkout-page #dd-delivery-method [data-role="delivery-label"] {
+    line-height: var(--dd-row-h);
+}
+
+.checkout-page #dd-country [data-role="country-label"] {
+    line-height: var(--dd-row-h);
+}
+
+/* Переключение режимов оформления */
+.checkout-page .contact-info-pick-up {
+    display: none;
+}
+
+.checkout-page.mode-pickup .contact-info {
+    display: none;
+}
+
+.checkout-page.mode-pickup .contact-info-pick-up {
+    display: block;
+}
+
+
+/* ====== CHECKOUT — отступы ТОЛЬКО для самовывоза (фикс дубля) ====== */
+:root {
+    --pickup-section-gap: 5px; /* отступ сверху секции полей */
+    --pickup-field-gap: 15px; /* расстояние МЕЖДУ формами */
+    --pickup-label-gap: 3px; /* отступ между лейблом и инпутом */
+}
+
+/* Базово самовывоз скрыт (оставляем как было выше) */
+/* .checkout-page .contact-info-pick-up{ display:none; } */
+
+/* Показываем и оформляем ТОЛЬКО в режиме самовывоза */
+.checkout-page.mode-pickup .contact-info-pick-up {
+    display: grid !important;
+    grid-auto-rows: max-content;
+    row-gap: var(--pickup-field-gap);
+    margin-top: var(--pickup-section-gap);
+}
+
+/* В режиме самовывоза скрываем доставку на всякий случай жёстко */
+.checkout-page.mode-pickup .contact-info {
+    display: none !important;
+}
+
+/* Сброс лишних margin’ов внутри самовывоза */
+.checkout-page.mode-pickup .contact-info-pick-up > *,
+.checkout-page.mode-pickup .contact-info-pick-up .dropdown,
+.checkout-page.mode-pickup .contact-info-pick-up .input-wrap {
+    margin: 0;
+}
+
+/* Отступ между лейблом и полем */
+.checkout-page.mode-pickup .contact-info-pick-up .text-block-105,
+.checkout-page.mode-pickup .contact-info-pick-up .text-block-107,
+.checkout-page.mode-pickup .contact-info-pick-up .text-block-109 {
+    display: block;
+    margin: 0 0 var(--pickup-label-gap) 0;
+    line-height: 1.1;
+}
+
+/* Коробка инпута — как в доставке */
+.checkout-page.mode-pickup .contact-info-pick-up .input-wrap {
+    display: flex;
+    align-items: center;
+    min-height: var(--dd-row-h);
+    padding: 8px 12px;
+    background: transparent;
+}
+
+.checkout-page.mode-pickup .contact-info-pick-up .input-wrap .dropdown-input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    padding: 0;
+    outline: none;
+    min-height: var(--dd-row-h);
+}
+
+/* Вкладки «Доставка / Самовывоз» как кнопки */
+.delivery-methods .delivery-m,
+.delivery-methods .pickup-m {
+    cursor: pointer; /* ладошка */
+    transition: background .15s ease, box-shadow .15s ease;
+}
+
+/* Кнопка корзины — базовые стили для микроанимации */
+.add-product-link-wrap-1 {
+    position: relative;
+}
+
+/* эффект «нажатия» во время запроса */
+.add-product-link-wrap-1 img {
+    transition: transform .14s ease;
+}
+
+.add-product-link-wrap-1.adding img {
+    transform: scale(0.92);
+}
+
+/* вспыхивающая точка в правом верхнем углу (появляется на .ping) */
+.add-product-link-wrap-1::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #131313; /* под цвет иконки */
+    opacity: 0;
+    transform: scale(.4);
+    pointer-events: none;
+}
+
+.add-product-link-wrap-1.ping::before {
+    animation: cart-dot .55s ease-out;
+}
+
+@keyframes cart-dot {
+    0% {
+        opacity: 0;
+        transform: scale(.4);
+    }
+    25% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.7);
+    }
+}
+
+/* уважаем настройки «меньше анимации» */
+@media (prefers-reduced-motion: reduce) {
+    .add-product-link-wrap-1.ping::before {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* =========================
+   Строка товара: ровная сетка
+   ========================= */
+.cart-window .product-line,
+.checkout-page .product-line-placing {
+    display: grid;
+    grid-template-columns: 60px 1fr max-content 100px 24px; /* img | name | price | qty | close */
+    gap: 16px;
+    align-items: center;
+}
+
+/* Крестик всегда ровно справа своей колонки */
+.cart-window .pl-close-button,
+.checkout-page .pl-close-button {
+    justify-self: end;
+}
+
+/* Картинка товара */
+.cart-window .pl-img-wrap,
+.checkout-page .pl-img-wrap {
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+}
+
+.cart-window .pl-img-wrap img,
+.checkout-page .pl-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Цена — без переноса */
+.cart-window .pl-price,
+.checkout-page .pl-price {
+    white-space: nowrap;
+}
+
+/* =========================
+   Счётчик количества: компактный, с широкими зонами − / +
+   ========================= */
+.cart-window .pl-quantity-grid-wrap,
+.checkout-page .pl-quantity-grid-wrap {
+    display: grid;
+    grid-template-columns: 1fr 28px 1fr; /* − | qty | + */
+    align-items: center;
+    justify-items: center;
+    width: 84px; /* общая ширина */
+    height: 26px; /* общая высота */
+    box-sizing: border-box;
+    overflow: hidden;
+    user-select: none;
+    gap: 0; /* без зазоров */
+}
+
+/* кликабельные зоны занимают всю колонку */
+.cart-window .plq-minus-quantity,
+.checkout-page .plq-minus-quantity,
+.cart-window .plq-plus-quantity,
+.checkout-page .plq-plus-quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    outline: none;
+}
+
+/* тонкие разделители внутри «инпута» */
+.cart-window .plq-minus-quantity,
+.checkout-page .plq-minus-quantity {
+    border-right: 1px solid rgba(0, 0, 0, .12);
+}
+
+.cart-window .plq-plus-quantity,
+.checkout-page .plq-plus-quantity {
+    border-left: 1px solid rgba(0, 0, 0, .12);
+}
+
+/* иконки внутри — компактные */
+.cart-window .plq-minus-quantity img,
+.checkout-page .plq-minus-quantity img,
+.cart-window .plq-plus-quantity img,
+.checkout-page .plq-plus-quantity img {
+    width: 20px;
+    height: 20px;
+    pointer-events: none; /* кликаем по зоне, не по самому img */
+}
+
+/* число по центру */
+.cart-window .pl-quantity-grid-wrap [data-role="qty"],
+.checkout-page .pl-quantity-grid-wrap [data-role="qty"] {
+    text-align: center;
+    font-size: 13px;
+    line-height: 1;
+}
+
+/* лёгкая обратная связь */
+.cart-window .plq-minus-quantity:hover,
+.checkout-page .plq-minus-quantity:hover,
+.cart-window .plq-plus-quantity:hover,
+.checkout-page .plq-plus-quantity:hover {
+    background: rgba(0, 0, 0, .03);
+}
+
+.cart-window .plq-minus-quantity:active,
+.checkout-page .plq-minus-quantity:active,
+.cart-window .plq-plus-quantity:active,
+.checkout-page .plq-plus-quantity:active {
+    background: rgba(0, 0, 0, .06);
+}
+
+
+/* поле — одна нижняя линия */
+.search-min-input {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .25);
+    background: transparent;
+    padding: 4px 6px 6px 6px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-min-input::placeholder {
+    color: rgba(0, 0, 0, .45);
+}
+
+.search-min-input:focus {
+    border-bottom-color: rgba(0, 0, 0, .6);
+}
+
+/* гасим возможную нижнюю линию у обёрток webflow */
+.search-window .search-string,
+.search-window .search-area {
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Результаты */
+.search-window .search-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 12px;
+    align-items: center;
+
+    /* было: padding: 8px 0;  — только сверху/снизу */
+    padding: 8px 12px; /* теперь есть отступы слева/справа */
+
+    text-decoration: none;
+    color: inherit;
+}
+
+.search-window .search-item:hover {
+    background: rgba(0, 0, 0, .03);
+}
+
+.search-window .si-thumb {
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+}
+
+.search-window .si-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.search-window .si-meta {
+    display: grid;
+    grid-template-columns:1fr auto;
+    gap: 8px;
+}
+
+.search-window .si-title {
+    font-size: 14px;
+}
+
+.search-window .si-price {
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* Вся панель поиска — тот же шрифт, что и на сайте */
+.search-window {
+    font-family: "Cygre Book", Arial, sans-serif !important;
+    color: var(--blackline);
+}
+
+/* Инпуты по умолчанию любят сбрасывать шрифт — наследуем явно */
+.search-window input,
+.search-window select,
+.search-window textarea,
+.search-window button {
+    font: inherit !important; /* и семейство, и размер, и line-height */
+}
+
+/* Текст позиции */
+.search-window .si-title {
+    font-family: "Cygre Book", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+/* Цена — жирная */
+.search-window .si-price {
+    font-family: "Cygre Book", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600; /* можно 700, если нужно жирнее */
+    white-space: nowrap;
+}
+
+/* плейсхолдер — тем же шрифтом и цветом, что у тебя принят */
+.search-min-input::placeholder {
+    font-family: inherit;
+    color: #28272373; /* близко к твоему blackline с прозрачностью */
+}
+
+/* базовое состояние */
+.info-about-wrap-3 {
+    background-color: var(--blackline);
+    color: var(--white);
+}
+
+/* белая вспышка */
+.info-about-wrap-3.flash {
+    animation: flashWhite .28s ease;
+}
+
+/* на время вспышки перекрасим текст внутри */
+.info-about-wrap-3.flash .text-block-49 {
+    color: var(--blackline) !important;
+}
+
+@keyframes flashWhite {
+    0% {
+        background-color: var(--blackline);
+    }
+    30% {
+        background-color: #fff;
+    }
+    70% {
+        background-color: #fff;
+    }
+    100% {
+        background-color: var(--blackline);
+    }
+}
+
+/* PRODUCT — ховер/актив для зон − / + (без изменения размеров) */
+.product-page .info-about-wrap-4 .iaw-img-1,
+.product-page .info-about-wrap-4 .iaw-img-2 {
+    display: inline-flex; /* чтобы фон ложился по иконке */
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    outline: none;
+    transition: background .15s ease; /* плавный отклик */
+}
+
+.product-page .info-about-wrap-4 .iaw-img-1:hover,
+.product-page .info-about-wrap-4 .iaw-img-2:hover {
+    background: rgba(0, 0, 0, .03);
+}
+
+.product-page .info-about-wrap-4 .iaw-img-1:active,
+.product-page .info-about-wrap-4 .iaw-img-2:active {
+    background: rgba(0, 0, 0, .06);
+}
+
+/* чтобы клик шел по ссылке, а не по картинке */
+.product-page .info-about-wrap-4 .iaw-img-1 img,
+.product-page .info-about-wrap-4 .iaw-img-2 img {
+    pointer-events: none;
+}
+
+/* CART & MINI-CART — убрать внутренние разделители у счётчика */
+.cart-window .plq-minus-quantity,
+.checkout-page .plq-minus-quantity,
+.cart-window .plq-plus-quantity,
+.checkout-page .plq-plus-quantity {
+    border: 0 !important; /* сносим вертикальные линии */
+}
+
+/* на всякий случай: никакой «тени-разделителя» у центрального числа */
+.cart-window .pl-quantity-grid-wrap [data-role="qty"],
+.checkout-page .pl-quantity-grid-wrap [data-role="qty"] {
+    box-shadow: none !important;
+}
+
+/* оставить лёгкий отклик при наведении/нажатии (как на продукте) */
+.cart-window .plq-minus-quantity:hover,
+.checkout-page .plq-minus-quantity:hover,
+.cart-window .plq-plus-quantity:hover,
+.checkout-page .plq-plus-quantity:hover {
+    background: rgba(0, 0, 0, .03);
+}
+
+.cart-window .plq-minus-quantity:active,
+.checkout-page .plq-minus-quantity:active,
+.cart-window .plq-plus-quantity:active,
+.checkout-page .plq-plus-quantity:active {
+    background: rgba(0, 0, 0, .06);
+}
+
+/* клики не перехватываются картинками */
+.cart-window .plq-minus-quantity img,
+.checkout-page .plq-minus-quantity img,
+.cart-window .plq-plus-quantity img,
+.checkout-page .plq-plus-quantity img {
+    pointer-events: none;
+}
+
+.successfully-window {
+    position: fixed;
+    inset: 0;
+    display: none;
+}
+
+.successfully-window.is-open {
+    display: block;
+}
+
+.shadow-on-sw {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+    display: grid;
+    place-items: center;
+}
+
+.sw-block {
+    max-width: 560px;
+    width: min(92vw, 560px);
+    background: #fff;
+    padding: 28px;
+}
+
+
+/* overrides */
+.home-page .new-bestsellers {
+    height: auto; /* вместо фиксированной высоты */
+}
+
+
+/* плитки каталога на главной */
+.quick-block-n4,
+.quick-block-n5,
+.quick-block-n6 {
+    position: relative;
+    overflow: hidden; /* чтобы зум не «выползал» за скругление */
+    background-size: cover; /* исходное состояние */
+    background-position: center;
+    transition: background-size .8s ease,
+    background-position .8s ease,
+    transform .6s ease;
+    will-change: background-size, background-position, transform;
+}
+
+/* эффект при наведении и при фокусе с клавиатуры */
+.quick-block-n4:hover,
+.quick-block-n5:hover,
+.quick-block-n6:hover,
+.quick-block-n4:focus-visible,
+.quick-block-n5:focus-visible,
+.quick-block-n6:focus-visible {
+    background-size: 200%; /* «приближаем» картинку */
+    background-position: 50% 50%; /* слегка стягиваем к центру */
+    transform: translateZ(0); /* подсказка GPU, без визуального эффекта */
+}
+
+/* если включено «уменьшение анимаций» в ОС — не дёргаем пользователя */
+@media (prefers-reduced-motion: reduce) {
+    .quick-block-n4,
+    .quick-block-n5,
+    .quick-block-n6 {
+        transition: none;
+    }
+}
+
+
+.body-6 #map-container {
+    min-height: 420px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.ymaps-2-1-79-ground-pane {
+    filter: grayscale(100%) contrast(1.05);
+}
+
+
+/* Контейнер под карту (правый блок) */
+#map-container {
+    position: relative;
+    width: 100%;
+    min-height: 420px; /* подбери под макет */
+    background: none !important;
+    pointer-events: auto !important;
+    z-index: 1;
+}
+
+/* Снимем фон/оверлеи, которые могли оставаться у блока из Webflow */
+.ca-img-wrap,
+.ca-img-wrap::before,
+.ca-img-wrap::after {
+    background: none !important;
+    box-shadow: none !important;
+    pointer-events: auto !important;
+}
+
+/* Ч/б стиль карты */
+#map-container .ymaps-2-1-79-map,
+#map-container .ymaps-2-1-79-ground-pane {
+    filter: grayscale(100%);
+}
+
+/* ---- Delivery page: make images shorter ---- */
+.delivery-section .da-img-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.delivery-section .da-img-wrap img {
+    width: 100%;
+    height: 490px; /* <— фикс. высота: фотки будут «обрезаны» по высоте */
+    object-fit: cover; /* центрируем и режем лишнее красиво */
+    object-position: center;
+    display: block;
+}
+
+/* ---- About: выровнять левый край как в шапке/других страницах ---- */
+.about-section .about-sonder-block {
+    padding-left: 44px; /* подгони при желании: 44–48px обычно совпадает с "КАТАЛОГ" */
+    padding-right: 44px;
+}
+
+/* убираем возможный сдвиг у первого текстового блока */
+.about-section .asb-wrap-1 {
+    margin-left: 0 !important;
+    justify-self: start; /* на всякий случай, если грид ставил центр/конец */
+}
+
+@media (min-width: 992px) {
+    .about-section .about-sonder-block {
+        padding-left: 64px; /* как на десктопе у шапки */
+        padding-right: 64px;
+    }
+}
+
+
+/* === CONTACT METHOD (ник + Telegram | Instagram) ====================== */
+
+/* отступ между лейблом и полем */
+.contact-info .contact-method .text-block-109 {
+    margin: 0 0 7px 0;
+    line-height: 1.1;
+}
+
+/* общий бокс поля — как у остальных, высота = 40 + 8 + 8 = 56px */
+.cm-composite {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* слева инпут, справа сегменты */
+    box-sizing: border-box;
+    height: calc(var(--dd-row-h) + 16px);
+    border: 1px solid #191919;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+/* левая часть — инпут ника */
+.cm-input {
+    border: 0;
+    height: 100%;
+    padding: 12px !important; /* немного больше слева, чтобы не «липло» */
+    background: transparent;
+    outline: none;
+    font: inherit;
+}
+
+.cm-input::placeholder {
+    color: #28272373;
+    font: inherit;
+}
+
+/* правая часть — два сегмента одинаковой ширины */
+.cm-seg {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Telegram | Instagram */
+    height: 100%;
+    border-left: 1px solid #191919;
+    align-items: stretch;
+}
+
+/* Сегменты без ховер-подсветки; плавный переход оставить можно */
+.cm-seg-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 12px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 400;
+    border-radius: 0;
+    line-height: 1;
+    transition: background-color .15s ease, color .15s ease;
+}
+
+.cm-seg-btn input[type="radio"] {
+  display: none;
+}
+
+/* hover-эффектов */
+.cm-seg-btn:not(.is-active):hover,
+.cm-seg-btn:not(.is-active):focus-visible {
+    background: #191919;  /* подложка */
+    color: #ffffff;
+}
+
+/* выбранное состояние */
+.cm-seg-btn.is-active {
+    background: #191919;
+    color: #fff;
+}
+
+/* разделитель между кнопками */
+.cm-seg-btn + .cm-seg-btn {
+    border-left: 1px solid #191919;
+}
+
+/* === PICKUP: контакт-метод — те же отступы, что у остальных полей === */
+
+/* лейбл: такой же зазор, что и в самовывозе */
+.checkout-page.mode-pickup .contact-info-pick-up .contact-method .text-block-109{
+  margin: 0 0 7px 0;  /* использует 3px из :root */
+  line-height: 1.1;
+}
+
+/* внешний бокс поля: та же высота и коробка */
+.checkout-page.mode-pickup .contact-info-pick-up .cm-composite{
+  box-sizing: border-box;
+  height: calc(var(--dd-row-h) + 16px);   /* 40 + 8 + 8 = 56px */
+  border: 1px solid #191919;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+/* внутренние отступы как у .input-wrap */
+.checkout-page.mode-pickup .contact-info-pick-up .cm-input{
+  height: 100%;
+  padding: 8px 12px !important;
+}
+
+/* кнопки-сегменты: такие же горизонтальные отступы */
+.checkout-page.mode-pickup .contact-info-pick-up .cm-seg-btn{
+  padding: 0 12px;
+}
+
+/* сам блок формы — без лишних внешних отступов (сетку делает row-gap) */
+.checkout-page.mode-pickup .contact-info-pick-up .contact-method{
+  margin: 0;
+}
+
+/* === Checkout: "Комментарий к заказу" — в одном стиле с полями === */
+
+/* отступ лейбла как у остальных */
+.order-comment .text-block-109{
+  margin: 0 0 7px 0;
+  line-height: 1.1;
+}
+
+/* внешняя «коробка» поля */
+.order-comment .input-wrap{
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  min-height: calc(var(--dd-row-h) + 16px); /* как обычное поле */
+  padding: 8px 12px;
+  background: transparent;
+  border: 0px solid #191919;
+  border-radius: 0;
+}
+
+/* сама textarea — без собственной рамки, на всю ширину */
+.order-comment .dropdown-input.textarea{
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 0;                 /* отступы дает .input-wrap */
+  resize: vertical;           /* можно тянуть по высоте */
+  min-height: calc(3 * var(--dd-row-h)); /* стартовая высота ≈ 3 строки */
+  line-height: 1.4;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+/* плейсхолдер в общем стиле */
+.order-comment .dropdown-input.textarea::placeholder{
+  color: #28272373;
+  font: inherit;
+}
+
+
+
+/* оверлей */
+.successfully-window .shadow-on-sw {
+  position: fixed !important;
+  inset: 0 !important;
+  display: block !important;           /* пусть ведёт себя как слой, не как флекс-контейнер */
+  background: rgba(0,0,0,.45) !important;
+  z-index: 2000 !important;
+}
+
+/* сам белый блок — центр фикс/трансформ */
+.successfully-window .sw-block {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  max-width: 560px !important;
+  width: min(92vw, 560px) !important;
+  background: #fff !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.25) !important;
+}
+
+/* убрать паразитные внешние отступы у внутренних обёрток */
+.successfully-window .sw-section,
+.successfully-window .text-on-sw-wrap,
+.successfully-window .button-on-sw-wrap {
+  margin: 0 !important;
+}
+
+
+/* ===== INDEX NAVBAR — белые иконки/лого на всех ширинах ===== */
+/* Хедер главной страницы: делаем лого и иконки белыми всегда */
+.home-page .w-layout-grid.header .sonder-logo-1 img,
+.home-page .w-layout-grid.header .icons img{
+  filter: brightness(0) invert(1) contrast(1.05);
+}
+
+/* Текстовая ссылка "КАТАЛОГ" слева — тоже белая */
+.home-page .w-layout-grid.header .menu a{
+  color:#fff !important;
+  text-decoration:none;
+}
+
+
+/* ===== PAGINATION: keep counter truly centered (all viewports) ===== */
+.pagination-grid{
+  position: relative;         /* якорь для стрелок */
+  display: block;             /* не нужен flex/space-between */
+  text-align: center;         /* центрируем счётчик */
+  padding: 6px 40px;          /* внутренние поля, чтобы не наезжать стрелками; подгони при желании */
+}
+
+/* Счётчик страниц — по центру */
+.pagination-grid .text-block-38,
+.pagination-grid .text-block-39,
+.pagination-grid .page-counter{
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Левая/правая стрелки: фиксируем у краёв контейнера */
+.pagination-grid a:first-child{
+  position: absolute;
+  left: 12px;                 /* подгони при желании */
+  top: 50%;
+  transform: translateY(-50%);
+}
+.pagination-grid a:last-child{
+  position: absolute;
+  right: 12px;                /* подгони при желании */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Если стрелка задизейблена — просто прячем и место не нужно,
+   центр всё равно фиксированный */
+.pagination-grid .is-disabled{
+  visibility: hidden;
+  pointer-events: none;
+}

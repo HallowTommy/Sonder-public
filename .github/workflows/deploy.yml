@@ -1,0 +1,66 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write   # нужно, чтобы пушить в GHCR
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ghcr.io/hallowtommy/sonder-web:latest
+            ghcr.io/hallowtommy/sonder-web:${{ github.sha }}
+
+  deploy:
+    if: ${{ false }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH deploy to server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            cd ${{ secrets.PROJECT_DIR }} || {
+              mkdir -p ${{ secrets.PROJECT_DIR }}
+              cd ${{ secrets.PROJECT_DIR }}
+              git clone ${{ secrets.REPO_SSH_URL }} .
+            }
+
+            # подтянуть последние изменения репозитория (compose, Caddyfile, код)
+            git fetch --all
+            git reset --hard origin/main
+
+            # логин в GHCR на сервере
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # Переменная тега образа: конкретный SHA или latest
+            export VERSION=${{ github.sha }}
+
+            # подтянуть и перезапустить
+            docker compose pull web
+            docker compose up -d --force-recreate web caddy
+
+            # (миграции и collectstatic уже выполняются в командe сервиса web)

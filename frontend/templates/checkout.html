@@ -1,0 +1,856 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Checkout{% endblock %}
+{% block og_title %}Checkout{% endblock %}
+{% block twitter_title %}Checkout{% endblock %}
+{% block body_class %}body-3 nav-dark{% endblock %}
+
+{% block header_left %}
+    <a href="{% url 'shop:catalog' %}" class="text-block-27">КАТАЛОГ</a>
+{% endblock %}
+
+{% block content %}
+    <section class="checkout-page">
+        <form id="checkout-form" method="post" action="{% url 'shop:checkout_submit' %}" data-fallback="1">
+            {% csrf_token %}
+
+            <div class="checkout-grid">
+                <div class="checkout-info">
+                    <div class="ci-grid">
+                        <div class="text-block-93">Оформление заказа</div>
+
+                        <div class="delivery-methods">
+                            <div class="delivery-m">
+                                <div class="dm-point"><img src="{% static 'images/Radio.svg' %}" loading="lazy" alt="">
+                                </div>
+                                <div class="dm-info-wrap">
+                                    <img src="{% static 'images/hugeicons_delivery-truck-01.svg' %}" loading="lazy"
+                                         alt="">
+                                    <div class="text-block-94">Доставка</div>
+                                </div>
+                            </div>
+                            <div class="pickup-m">
+                                <div class="pm-point"><img src="{% static 'images/Radio-1.svg' %}" loading="lazy"
+                                                           alt=""></div>
+                                <div class="pm-info-wrap">
+                                    <img src="{% static 'images/hugeicons_safe-delivery-01.svg' %}" loading="lazy"
+                                         alt="">
+                                    <div class="pmi-text-wrap">
+                                        <div class="text-block-95">Самовывоз</div>
+                                        <div class="text-block-96">Тимирязева 65Б, пом 903</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-info">
+                            <div class="delivery-method-choose">
+                                <div class="text-block-97">Cпособ доставки *</div>
+
+                                <div id="dd-delivery-method" class="dropdown w-dropdown" data-hover="false"
+                                     data-delay="0">
+                                    <div class="dropdown-toggle w-dropdown-toggle" tabindex="0" role="button"
+                                         aria-expanded="false">
+                                        <div class="dropdown-input" data-role="delivery-label">Выберите способ</div>
+                                        <div class="w-icon-dropdown-toggle"></div>
+                                    </div>
+                                    <nav class="w-dropdown-list" id="delivery_list"></nav>
+                                    <input type="hidden" name="delivery_provider" id="delivery_provider" value="">
+                                </div>
+                            </div>
+
+                            <div class="country-choose">
+                                <div class="text-block-98">Страна *</div>
+                                <div id="dd-country" class="dropdown w-dropdown combobox" data-hover="false"
+                                     data-delay="0">
+                                    <div class="dropdown-toggle w-dropdown-toggle" tabindex="0" role="button"
+                                         aria-expanded="false">
+                                        <div class="dropdown-input" data-role="country-label">Выберите страну</div>
+                                        <div class="w-icon-dropdown-toggle"></div>
+                                    </div>
+                                    <nav class="w-dropdown-list">
+                                        {% for code, name in countries %}
+                                            <a href="#" class="w-dropdown-link" data-code="{{ code }}"
+                                               data-name="{{ name }}">{{ name }}</a>
+                                        {% endfor %}
+                                    </nav>
+                                    <input type="hidden" name="country" id="country_code"
+                                           value="{{ selected_country }}">
+                                </div>
+                            </div>
+
+                            <div class="city-choose">
+                                <div class="text-block-101">Город *</div>
+                                <div id="dd-city" class="dropdown combobox">
+                                    <div class="input-wrap" role="presentation">
+                                        <input type="text" id="city_input" name="city" class="dropdown-input"
+                                               placeholder="Начните вводить город" autocomplete="address-level2"
+                                               maxlength="60" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pick-up-point-address">
+                                <div class="text-block-103">Адрес *</div>
+                                <div class="dropdown">
+                                    <div class="input-wrap" role="presentation">
+                                        <input type="text" id="pickup_address" name="pickup_address"
+                                               class="dropdown-input"
+                                               placeholder="Введите адрес" autocomplete="address-line1"
+                                               maxlength="120" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="first-last-name">
+                                <div class="text-block-105">Имя Фамилия *</div>
+                                <div class="dropdown">
+                                    <div class="input-wrap" role="presentation">
+                                        <input type="text" id="full_name" name="full_name" class="dropdown-input"
+                                               placeholder="Введите полное имя" autocomplete="name"
+                                               maxlength="80" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="email-address">
+                                <div class="text-block-107">Email *</div>
+                                <div class="dropdown">
+                                    <div class="input-wrap" role="presentation">
+                                        <input type="email" id="email" name="email" class="dropdown-input"
+                                               placeholder="Введите email" autocomplete="email"
+                                               maxlength="100" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="phone-number">
+                                <div class="text-block-109">Номер телефона *</div>
+                                <div class="dropdown">
+                                    <div class="input-wrap" role="presentation">
+                                        <input type="tel" id="phone" name="phone" class="dropdown-input"
+                                               placeholder="Введите номер телефона" autocomplete="tel" inputmode="tel"
+                                               pattern="[0-9 ()+.-]{5,20}" maxlength="20" required>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- ПРЕДПОЧТИТЕЛЬНЫЙ СПОСОБ СВЯЗИ — ОДИН БОКС / 3 ЧАСТИ -->
+                            <div class="contact-method">
+                                <div class="text-block-109">Связаться со мной через</div>
+                                <div class="cm-composite" role="group"
+                                     aria-label="Предпочтительный способ связи (доставка)">
+                                    <!-- НИК ДЛЯ ДОСТАВКИ -->
+                                    <input
+                                            type="text"
+                                            id="contact_handle"
+                                            name="contact_handle"
+                                            class="dropdown-input cm-input"
+                                            placeholder="@nickname"
+                                            maxlength="64"
+                                            autocomplete="off"
+                                            disabled>
+                                    <!-- ПЕРЕКЛЮЧАТЕЛЬ ДОСТАВКИ -->
+                                    <div class="cm-seg">
+                                        <label class="cm-seg-btn">
+                                            <input type="radio" name="contact_method" value="tg">  <!-- tg -->
+                                            <span>Telegram</span>
+                                        </label>
+                                        <label class="cm-seg-btn">
+                                            <input type="radio" name="contact_method" value="ig">  <!-- ig -->
+                                            <span>Instagram</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="contact-info-pick-up">
+                            <div class="first-last-name">
+                                <div class="text-block-105">Имя Фамилия *</div>
+                                <div class="dropdown">
+                                    <div class="input-wrap" role="presentation">
+                                        <input type="text" id="full_name_pu" name="full_name_pickup"
+                                               class="dropdown-input"
+                                               placeholder="Введите полное имя" autocomplete="name"
+                                               maxlength="80" required disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="email-address">
+                                <div class="text-block-107">Email *</div>
+                                <div class="dropdown">
+                                    <div class="input-wrap" role="presentation">
+                                        <input type="email" id="email_pu" name="email_pickup" class="dropdown-input"
+                                               placeholder="Введите email" autocomplete="email"
+                                               maxlength="100" required disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="phone-number">
+                                <div class="text-block-109">Номер телефона *</div>
+                                <div class="dropdown">
+                                    <div class="input-wrap" role="presentation">
+                                        <input type="tel" id="phone_pu" name="phone_pickup" class="dropdown-input"
+                                               placeholder="Введите номер телефона" autocomplete="tel" inputmode="tel"
+                                               pattern="[0-9 ()+.-]{5,20}" maxlength="20" required disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- СВЯЗАТЬСЯ СО МНОЙ (для САМОВЫВОЗА) -->
+                            <div class="contact-method">
+                                <div class="text-block-109">Связаться со мной через</div>
+
+                                <div class="cm-composite" role="group"
+                                     aria-label="Предпочтительный способ связи (самовывоз)">
+                                    <!-- ник -->
+                                    <input
+                                            type="text"
+                                            id="contact_handle_pu"
+                                            name="contact_handle_pickup"
+                                            class="dropdown-input cm-input"
+                                            placeholder="@nickname"
+                                            maxlength="64"
+                                            autocomplete="off"
+                                            disabled>
+                                    <!-- Telegram | Instagram -->
+                                    <div class="cm-seg">
+                                        <label class="cm-seg-btn">
+                                            <input type="radio" name="contact_method_pickup" value="tg">
+                                            <span>Telegram</span>
+                                        </label>
+                                        <label class="cm-seg-btn">
+                                            <input type="radio" name="contact_method_pickup" value="ig">
+                                            <span>Instagram</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-added">
+                    <div class="ca-grid">
+                        <div class="text-block-111">Ваш заказ</div>
+
+                        {% if cart.items %}
+                            <div class="plp-wrap" id="cart-lines">
+                                {% for item in cart.items %}
+                                    <div class="product-line-placing" data-product-id="{{ item.id }}">
+                                        <div class="pl-img-wrap">
+                                            <a href="{% url 'shop:product-detail' item.slug %}" class="pl-img-link"
+                                               title="{{ item.name }}">
+                                                {% if item.image %}
+                                                    <img src="{{ item.image }}" alt="{{ item.name }}" class="image-12"
+                                                         loading="lazy">
+                                                {% else %}
+                                                    <img src="{% static 'images/placeholder.jpg' %}"
+                                                         alt="{{ item.name }}" class="image-12" loading="lazy">
+                                                {% endif %}
+                                            </a>
+                                        </div>
+
+                                        <div class="pl-about-info">
+                                            {{ item.name }}{% if item.size %},<br>{{ item.size }}{% endif %}
+                                        </div>
+
+                                        <div class="pl-price">{{ item.line_total }} BYN</div>
+
+                                        <div class="pl-quantity-grid-wrap">
+                                            <a href="#" class="plq-minus-quantity w-inline-block" data-action="minus">
+                                                <img src="{% static 'images/button-minus.svg' %}" alt="-">
+                                            </a>
+                                            <div class="plqg-quantity-info" data-role="qty">{{ item.qty }}</div>
+                                            <a href="#" class="plq-plus-quantity w-inline-block" data-action="plus">
+                                                <img src="{% static 'images/button-plus.svg' %}" alt="+">
+                                            </a>
+                                        </div>
+
+                                        <a href="#" class="pl-close-button w-inline-block" data-action="remove"
+                                           aria-label="Удалить">
+                                            <img src="{% static 'images/Vector.svg' %}" alt="">
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!-- КОММЕНТАРИЙ К ЗАКАЗУ -->
+                            <div class="order-comment">
+                                <div class="text-block-109">Комментарий к заказу</div>
+                                <div class="dropdown">
+                                    <div class="input-wrap" role="presentation">
+      <textarea
+              id="order_comment"
+              name="order_comment"
+              class="dropdown-input textarea"
+              rows="4"
+              maxlength="500"
+              placeholder="Если у вас есть пожелания по доставке, нужно подписать открытку или что-то еще, оставьте тут комментарий"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="just-line-2-copy"></div>
+                            <div class="text-block-91-copy">
+                                Сумма:&nbsp;<span id="cart-total">{{ cart.total }}</span>&nbsp;BYN
+                            </div>
+                            <button class="button-copy w-button" type="submit" form="checkout-form">ОФОРМИТЬ ЗАКАЗ
+                            </button>
+                        {% else %}
+                            <div class="plp-wrap">
+                                <div class="product-line-placing" style="opacity:.7;display:block;padding:24px 0;">
+                                    Корзина пуста
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    {# модалка успешного оформления (оставляем как есть) #}
+    <section class="successfully-window">
+        <div class="shadow-on-sw">
+            <div class="sw-block">
+                <div class="sw-section">
+                    <div id="w-node-d69cbb41-a98b-06c9-a441-c158832541ec-e8e3170e" class="text-on-sw-wrap">
+                        <div class="text-block-112">Ваш заказ на сумму 188 BYN успешно оформлен!<br>Наш менеджер скоро
+                            свяжется с вами для<br>уточнения деталей оплаты
+                        </div>
+                    </div>
+                    <div id="w-node-d69cbb41-a98b-06c9-a441-c158832541f3-e8e3170e" class="button-on-sw-wrap">
+                        <a href="{% url 'shop:home' %}" class="button-2 w-button">ВЕРНУТЬСЯ НА ГЛАВНУЮ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        // CSRF
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+        }
+
+        const CSRF = getCookie('csrftoken');
+
+        const linesWrap = document.getElementById('cart-lines');
+        const totalEl = document.getElementById('cart-total');
+
+        async function updateCart(productId, action, qty) {
+            const body = new URLSearchParams({product_id: String(productId), action});
+            if (typeof qty !== 'undefined') body.append('qty', String(qty));
+            const resp = await fetch("{% url 'shop:cart_update' %}", {
+                method: 'POST',
+                headers: {'X-CSRFToken': CSRF, 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+                body
+            });
+            if (!resp.ok) throw new Error('network');
+            return resp.json();
+        }
+
+        // +/-/remove по строкам корзины
+        linesWrap?.addEventListener('click', async (e) => {
+            const btn = e.target.closest('[data-action]');
+            if (!btn) return;
+            e.preventDefault();
+
+            const row = btn.closest('.product-line-placing');
+            const pid = row?.getAttribute('data-product-id');
+            const action = btn.getAttribute('data-action');
+            if (!row || !pid || !action) return;
+
+            try {
+                const data = await updateCart(pid, action);
+                if (!data.ok) return;
+
+                if (totalEl) totalEl.textContent = data.total;
+
+                if (data.removed) {
+                    row.remove();
+                    if (!document.querySelector('#cart-lines .product-line-placing')) {
+                        linesWrap.innerHTML = '<div class="product-line-placing" style="opacity:.7;display:block;padding:24px 0;">Корзина пуста</div>';
+                    }
+                } else {
+                    const qtyEl = row.querySelector('[data-role="qty"]');
+                    const priceEl = row.querySelector('.pl-price');
+                    if (qtyEl) qtyEl.textContent = data.qty;
+                    if (priceEl) priceEl.textContent = data.line_total + ' BYN';
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    </script>
+
+    <script>
+        // Портал для dropdown (фикс позиционирования webflow-списков)
+        function portalDropdown($root, $fitEl, $clampEl) {
+            var $toggle = $root.find('.w-dropdown-toggle');
+            var $list = $root.find('.w-dropdown-list');
+            var $anchor = $('<div/>');
+            var opened = false;
+
+            $fitEl = ($fitEl && $fitEl.length) ? $fitEl : $root;
+            $clampEl = ($clampEl && $clampEl.length) ? $clampEl : null;
+
+            $list.addClass('dropdown-portal');
+
+            function place() {
+                if (!opened || !$fitEl[0]) return;
+                var fr = $fitEl[0].getBoundingClientRect();
+                var left = Math.max(Math.round(fr.left), 0);
+                var baseW = Math.round(fr.width);
+                var top = Math.round(fr.bottom);
+
+                var clampLeft = 0, clampRight = window.innerWidth;
+                if ($clampEl && $clampEl[0]) {
+                    var cr = $clampEl[0].getBoundingClientRect();
+                    clampLeft = Math.round(cr.left);
+                    clampRight = Math.round(cr.right);
+                    left = Math.max(left, clampLeft);
+                }
+                var width = Math.min(baseW, clampRight - left, window.innerWidth - left - 2);
+                if (width < 0) width = 0;
+
+                $list.css({
+                    right: 'auto',
+                    left: left + 'px',
+                    top: top + 'px',
+                    width: width + 'px',
+                    display: 'block',
+                    visibility: 'visible'
+                });
+            }
+
+            function onScrollOrResize() {
+                place();
+            }
+
+            function open() {
+                if (opened) return;
+                opened = true;
+                $anchor.insertBefore($list);
+                $(document.body).append($list);
+                $root.addClass('w--open');
+                $list.addClass('w--open').attr('aria-hidden', 'false');
+                $toggle.attr('aria-expanded', 'true');
+                place();
+                window.addEventListener('scroll', onScrollOrResize, true);
+                window.addEventListener('resize', onScrollOrResize);
+                $root.trigger('w-open');
+            }
+
+            function close() {
+                if (!opened) return;
+                opened = false;
+                $list.removeClass('w--open').attr('aria-hidden', 'true')
+                    .css({left: '', top: '', width: '', right: '', display: '', visibility: ''});
+                $anchor.replaceWith($list);
+                $root.removeClass('w--open');
+                $toggle.attr('aria-expanded', 'false');
+                window.removeEventListener('scroll', onScrollOrResize, true);
+                window.removeEventListener('resize', onScrollOrResize);
+                $root.trigger('w-close');
+            }
+
+            function isOpen() {
+                return opened;
+            }
+
+            document.addEventListener('mousedown', function (e) {
+                if (!opened) return;
+                if ($root[0].contains(e.target) || $list[0].contains(e.target)) return;
+                close();
+            });
+
+            return {open, close, isOpen, place, $list, $toggle};
+        }
+    </script>
+
+    <script>
+        // Dropdown "Способ доставки" + режим поля "Адрес"
+        (function () {
+            var $root = $('#dd-delivery-method');
+            if (!$root.length) return;
+
+            var $toggle = $root.find('.w-dropdown-toggle');
+            var $list = $root.find('#delivery_list');
+            var $label = $root.find('[data-role="delivery-label"]');
+            var $hidden = $('#delivery_provider');
+            var portal = portalDropdown($root, $root, $('.checkout-info'));
+
+            // адресный блок
+            var $addrLabel = $('.pick-up-point-address .text-block-103');
+            var $addrInput = $('#pickup_address');
+
+            // провайдеры, где разрешён только ПВЗ
+            var PUDO = new Set(['cdek', 'evropochta']);
+
+            function applyAddressMode(provider) {
+                var usePudo = PUDO.has(String(provider || '').toLowerCase());
+                if (!$addrLabel.length || !$addrInput.length) return;
+
+                if (usePudo) {
+                    $addrLabel.text('Адрес пункта выдачи *');
+                    $addrInput.prop('readOnly', false)
+                        .attr('placeholder', 'Выберите пункт выдачи')
+                        .addClass('is-pudo');
+                } else {
+                    $addrLabel.text('Адрес *');
+                    $addrInput.prop('readOnly', false)
+                        .attr('placeholder', 'Введите адрес')
+                        .removeClass('is-pudo');
+                }
+            }
+
+            var options = Array.isArray(window.DELIVERY_OPTIONS) && window.DELIVERY_OPTIONS.length
+                ? window.DELIVERY_OPTIONS
+                : [
+                    {value: 'yandex', title: 'Доставка Яндекс'},
+                    {value: 'cdek', title: 'Доставка СДЭК'},
+                    {value: 'evropochta', title: 'Доставка Европочта'},
+                    {value: 'autolight', title: 'Доставка Автолайт'}
+                ];
+
+            function renderOptions() {
+                $list.empty();
+                options.forEach(function (opt) {
+                    $('<a href="#" class="w-dropdown-link"></a>')
+                        .text(opt.title)
+                        .attr('data-value', opt.value)
+                        .appendTo($list);
+                });
+            }
+
+            renderOptions();
+
+            // инициализация выбранного значения
+            (function initSelected() {
+                var current = ($hidden.val() || '').trim();
+                var found = options.find(function (o) {
+                    return o.value === current;
+                });
+                if (found) $label.text(found.title);
+                applyAddressMode(current);
+            })();
+
+            $toggle.on('click', function (e) {
+                e.preventDefault();
+                portal.isOpen() ? portal.close() : portal.open();
+            });
+
+            // выбор пункта из списка
+            $list.on('click', '.w-dropdown-link', function (e) {
+                e.preventDefault();
+                var val = $(this).data('value') || '';
+                var title = $.trim($(this).text());
+                $hidden.val(val).trigger('change'); // важно: триггерим change
+                $label.text(title);
+                portal.close();
+                $toggle.attr('aria-expanded', 'false').blur();
+                applyAddressMode(val);              // применяем режим адреса
+            });
+
+            // если значение меняют извне — тоже применяем режим
+            $hidden.on('change', function () {
+                applyAddressMode($hidden.val());
+            });
+
+            var idx = -1;
+
+            function visible() {
+                return $list.find('.w-dropdown-link:visible');
+            }
+
+            $toggle.on('keydown', function (e) {
+                if ((e.key === 'Enter' || e.key === ' ') && !portal.isOpen()) {
+                    e.preventDefault();
+                    portal.open();
+                }
+            });
+
+            $(document).on('keydown', function (e) {
+                if (!portal.isOpen()) return;
+                var vis = visible();
+                if (!vis.length) return;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    idx = (idx + 1) % vis.length;
+                    vis.removeClass('is-active');
+                    $(vis[idx]).addClass('is-active')[0].scrollIntoView({block: 'nearest'});
+                    portal.place();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    idx = (idx <= 0 ? vis.length - 1 : idx - 1);
+                    vis.removeClass('is-active');
+                    $(vis[idx]).addClass('is-active')[0].scrollIntoView({block: 'nearest'});
+                    portal.place();
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (idx >= 0) $(vis[idx]).trigger('click');
+                } else if (e.key === 'Escape') {
+                    portal.close();
+                    $toggle.focus();
+                }
+            });
+        })();
+    </script>
+
+    <script>
+        // Dropdown "Страна"
+        (function () {
+            var $root = $('#dd-country');
+            if (!$root.length) return;
+
+            var $toggle = $root.find('.w-dropdown-toggle');
+            var $list = $root.find('.w-dropdown-list');
+            var $label = $root.find('[data-role="country-label"]');
+            var $hidden = $('#country_code');
+            var portal = portalDropdown($root, $root, $('.checkout-info'));
+
+            var code2name = {};
+            $list.find('.w-dropdown-link').each(function () {
+                code2name[$(this).data('code')] = $(this).text();
+            });
+
+            var initCode = "{{ selected_country|escapejs }}";
+            if (initCode && code2name[initCode]) {
+                $hidden.val(initCode);
+                $label.text(code2name[initCode]);
+            }
+
+            $toggle.on('click', function (e) {
+                e.preventDefault();
+                portal.isOpen() ? portal.close() : portal.open();
+            });
+
+            $list.on('click', '.w-dropdown-link', function (e) {
+                e.preventDefault();
+                var code = $(this).data('code') || '';
+                var name = $(this).text();
+                $hidden.val(code).trigger('change');
+                $label.text(name);
+                portal.close();
+                $toggle.attr('aria-expanded', 'false').blur();
+            });
+
+            var idx = -1;
+
+            function visible() {
+                return $list.find('.w-dropdown-link:visible');
+            }
+
+            $(document).on('keydown', function (e) {
+                if (!portal.isOpen()) return;
+                var vis = visible();
+                if (!vis.length) return;
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    idx = (idx + 1) % vis.length;
+                    vis.removeClass('is-active');
+                    $(vis[idx]).addClass('is-active')[0].scrollIntoView({block: 'nearest'});
+                    portal.place();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    idx = (idx <= 0 ? vis.length - 1 : idx - 1);
+                    vis.removeClass('is-active');
+                    $(vis[idx]).addClass('is-active')[0].scrollIntoView({block: 'nearest'});
+                    portal.place();
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (idx >= 0) $(vis[idx]).trigger('click');
+                } else if (e.key === 'Escape') {
+                    portal.close();
+                    $toggle.focus();
+                }
+            });
+        })();
+    </script>
+
+    <script>
+        // Переключение "Доставка/Самовывоз" + зеркалирование
+        (function () {
+            var $page = $('.checkout-page');
+            var $tabDelivery = $('.delivery-m');
+            var $tabPickup = $('.pickup-m');
+
+            var $dotDelivery = $('.delivery-m .dm-point img');
+            var $dotPickup = $('.pickup-m .pm-point img');
+
+            var RADIO_ON = "{% static 'images/Radio.svg' %}";
+            var RADIO_OFF = "{% static 'images/Radio-1.svg' %}";
+
+            var deliveryOnly = ['#delivery_provider', '#city_input', '#pickup_address', '#country_code'];
+            var commonDelivery = ['#full_name', '#email', '#phone'];
+            var commonPickup = ['#full_name_pu', '#email_pu', '#phone_pu'];
+
+            function setEnabled(selectors, enabled) {
+                selectors.forEach(function (sel) {
+                    var $el = $(sel);
+                    if (!$el.length) return;
+                    $el.prop('disabled', !enabled);
+                    if (enabled) {
+                        if ($el.attr('required') != null) $el.prop('required', true);
+                    } else {
+                        $el.prop('required', false);
+                    }
+                });
+            }
+
+            function swapDot($img, src) {
+                if (!$img.length || $img.attr('src') === src) return;
+                $img.stop(true, true).fadeOut(120, function () {
+                    $img.attr('src', src).fadeIn(120);
+                });
+            }
+
+            function updateDots(mode) {
+                if (mode === 'pickup') {
+                    swapDot($dotDelivery, RADIO_OFF);
+                    swapDot($dotPickup, RADIO_ON);
+                } else {
+                    swapDot($dotDelivery, RADIO_ON);
+                    swapDot($dotPickup, RADIO_OFF);
+                }
+            }
+
+            function switchMode(mode) {
+                if (mode === 'pickup') {
+                    $page.addClass('mode-pickup');
+                    $tabPickup.addClass('is-active');
+                    $tabDelivery.removeClass('is-active');
+
+                    setEnabled(deliveryOnly, false);
+                    setEnabled(commonDelivery, false);
+                    setEnabled(commonPickup, true);
+                } else {
+                    $page.removeClass('mode-pickup');
+                    $tabDelivery.addClass('is-active');
+                    $tabPickup.removeClass('is-active');
+
+                    setEnabled(deliveryOnly, true);
+                    setEnabled(commonDelivery, true);
+                    setEnabled(commonPickup, false);
+                }
+                updateDots(mode);
+            }
+
+            $tabDelivery.on('click', function (e) {
+                e.preventDefault();
+                switchMode('delivery');
+            });
+            $tabPickup.on('click', function (e) {
+                e.preventDefault();
+                switchMode('pickup');
+            });
+
+            switchMode('delivery');
+
+            function mirror(a, b) {
+                var $a = $(a), $b = $(b);
+                if (!$a.length || !$b.length) return;
+                $a.on('input', function () {
+                    if (!$b.prop('disabled')) $b.val($a.val());
+                });
+                $b.on('input', function () {
+                    if (!$a.prop('disabled')) $a.val($b.val());
+                });
+            }
+
+            mirror('#full_name', '#full_name_pu');
+            mirror('#email', '#email_pu');
+            mirror('#phone', '#phone_pu');
+        })();
+    </script>
+    <script>
+        (function () {
+            function initContactMethod(root) {
+                const seg = root.querySelector('.cm-seg');
+                const handle = root.querySelector('.cm-input');
+                if (!seg || !handle) return;
+
+                const buttons = [...seg.querySelectorAll('.cm-seg-btn')];
+                const radios = buttons.map(b => b.querySelector('input[type="radio"]')).filter(Boolean);
+
+                let current = null; // 'tg' | 'ig' | null
+
+                function applyPlatform(val) {
+                    handle.disabled = false;
+                    handle.required = false; // поле необязательное
+                    if (val === 'tg') {
+                        handle.placeholder = '@nickname';
+                        handle.pattern = '^@?[A-Za-z0-9_]{5,32}$';
+                        handle.title = 'Telegram: 5–32 символов; латиница/цифры/нижнее подчёркивание. Можно с @';
+                    } else if (val === 'ig') {
+                        handle.placeholder = '@username';
+                        handle.pattern = '^@?(?=.{1,30}$)(?!.*\\.$)[A-Za-z0-9._]+$';
+                        handle.title = 'Instagram: до 30 символов; латиница/цифры/точка/нижнее подчёркивание. Можно с @';
+                    } else {
+                        // на всякий случай — сброс в дефолт
+                        handle.removeAttribute('pattern');
+                        handle.removeAttribute('title');
+                        handle.placeholder = '@nickname';
+                    }
+                }
+
+
+                function setActive(val) {
+                    buttons.forEach(b => b.classList.toggle('is-active', b.querySelector('input')?.value === val));
+                    radios.forEach(r => r.checked = (r.value === val));
+                    if (val) applyPlatform(val);
+                }
+
+                function clearSelection() {
+                    current = null;
+                    setActive(null);
+                    handle.disabled = true;
+                    handle.required = false;
+                    handle.value = '';
+                    handle.removeAttribute('pattern');
+                    handle.removeAttribute('title');
+                    handle.placeholder = '@nickname';
+                }
+
+                buttons.forEach(btn => {
+                    const r = btn.querySelector('input[type="radio"]');
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault(); // берём управление
+                        if (current === r.value) {
+                            clearSelection();         // повторный клик по активной — снять
+                        } else {
+                            current = r.value;        // выбрать
+                            setActive(current);
+                            handle.focus();
+                        }
+                    });
+                });
+
+                handle.addEventListener('blur', () => {
+                    const v = handle.value.trim();
+                    if (v && !v.startsWith('@')) handle.value = '@' + v;
+                });
+
+                // старт — без выбора
+                clearSelection();
+            }
+
+            // инициализируем для всех блоков .contact-method (доставка + самовывоз)
+            document.querySelectorAll('.contact-method').forEach(initContactMethod);
+        })();
+    </script>
+
+    <script>window.CHECKOUT_SUBMIT_URL = "{% url 'shop:checkout_submit' %}";</script>
+    <script src="{% static 'js/checkout-submit.js' %}"></script>
+{% endblock %}

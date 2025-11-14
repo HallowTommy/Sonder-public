@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cropping %}
+
+{% block title %}{{ product.name|default:"Product" }}{% endblock %}
+{% block og_title %}{{ product.name|default:"Product" }}{% endblock %}
+{% block twitter_title %}{{ product.name|default:"Product" }}{% endblock %}
+{% block body_class %}body-3 nav-dark{% endblock %}
+
+{% block header_left %}
+    <a href="{% url 'shop:catalog' %}" class="text-block-27">КАТАЛОГ</a>
+{% endblock %}
+
+{% block content %}
+    <section class="product-page">
+
+        <div class="w-layout-grid product-section">
+            <div id="w-node-a19bb76e-e6de-6340-97da-df0cf3daf012-a24ff853" class="w-layout-grid product-photos">
+                <div id="w-node-a19bb76e-e6de-6340-97da-df0cf3daf013-a24ff853" class="left-side-product-photos">
+
+                    {% for ph in product.photos.all|slice:":3" %}
+                        <div class="left-side-pp{{ forloop.counter }}">
+                            <div class="lspp-wrap-{{ forloop.counter }}"
+                                 style="position:relative;aspect-ratio:1/1;overflow:hidden;">
+                                <img src="{% cropped_thumbnail ph 'image_crop' %}"
+                                     alt="{{ ph.alt|default:product.name }}"
+                                     style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;">
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="left-side-pp1">
+                            <div class="lspp-wrap-1" style="position:relative;aspect-ratio:1/1;overflow:hidden;">
+                                <img src="{% static 'images/placeholder.jpg' %}"
+                                     alt=""
+                                     style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;">
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+                <div id="w-node-a19bb76e-e6de-6340-97da-df0cf3daf01d-a24ff853" class="left-side-product-slider">
+                    <div class="lsls-wrap-1">
+                        <div data-delay="4000" data-animation="slide" class="slider w-slider" data-autoplay="false"
+                             data-easing="ease" data-hide-arrows="false" data-disable-swipe="false"
+                             data-autoplay-limit="0"
+                             data-nav-spacing="3" data-duration="500" data-infinite="true">
+                            <div class="w-slider-mask">
+                                {% for ph in product.photos.all %}
+                                    <div class="slide w-slide"
+                                         style="background-image:url('{% cropped_thumbnail ph 'image_crop' %}');
+                                                 background-position:50%;background-size:cover;background-repeat:no-repeat;">
+                                    </div>
+                                {% empty %}
+                                    <div class="slide w-slide"
+                                         style="background-image:url('{% static 'images/placeholder.jpg' %}');
+                                                 background-position:50%;background-size:cover;background-repeat:no-repeat;">
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="w-slider-arrow-left">
+                                <div class="w-icon-slider-left"></div>
+                            </div>
+                            <div class="w-slider-arrow-right">
+                                <div class="w-icon-slider-right"></div>
+                            </div>
+                            <div class="slide-nav w-slider-nav w-round w-num"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="w-node-a19bb76e-e6de-6340-97da-df0cf3daf027-a24ff853" class="product-info">
+                <div class="product-info-wrap">
+                    <div class="product-info-grid">
+                        <div class="product-info-about-1">
+                            <div class="info-about-wrap-1">
+                                {% with cat=product.category %}
+                                    <div class="info-about-wrap-1">
+                                        {% if cat.parent %}
+                                            <div class="text-block-40">{{ cat.parent.name }}</div>
+                                            <div class="text-block-42">—</div>
+                                        {% endif %}
+                                        <div class="text-block-41">{{ cat.name }}</div>
+                                    </div>
+                                {% endwith %}
+                            </div>
+
+                            <div class="info-about-wrap-2">
+                                <div id="w-node-a19bb76e-e6de-6340-97da-df0cf3daf033-a24ff853"
+                                     class="text-block-44">{{ product.name }}</div>
+                                <div id="w-node-a19bb76e-e6de-6340-97da-df0cf3daf035-a24ff853" class="text-block-45">
+                                    {% if product.short_desc %}{{ product.short_desc }}{% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-info-about-2">
+                            {% if product.size_title or product.size_value %}
+                                <div id="w-node-a19bb76e-e6de-6340-97da-df0cf3daf038-a24ff853" class="text-block-46">
+                                    {{ product.size_title|default:"Размер" }}
+                                </div>
+                                <div class="text-block-47">
+                                    {{ product.size_value|default:"300 мл" }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-info-about-3">
+                            <div class="text-block-48">{{ product.price_byn }} BYN</div>
+                        </div>
+
+                        <div class="product-info-about-4" data-product-id="{{ product.id }}">
+                            <a href="#" class="info-about-wrap-3 w-inline-block add-product-link-wrap-1"
+                               data-product-id="{{ product.id }}">
+                                <div class="text-block-49">ДОБАВИТЬ В КОРЗИНУ</div>
+                            </a>
+                            <div class="info-about-wrap-4">
+                                <a href="#" class="iaw-img-1 w-inline-block" id="qty-minus">
+                                    <img src="{% static 'images/button-minus.svg' %}" loading="lazy" alt=""
+                                         class="image-5">
+                                </a>
+                                <div class="text-block-50" id="qty-value">1</div>
+                                <a href="#" class="iaw-img-2 w-inline-block" id="qty-plus">
+                                    <img src="{% static 'images/button-plus.svg' %}" loading="lazy" alt=""
+                                         class="image-6">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="product-info-about-5">
+                            {% if product.extra_text %}
+                                <div class="just-line-1"></div>
+                                <div class="text-block-52">
+                                    {{ product.extra_text|linebreaksbr }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="more-product">
+            <div class="more-product-title-wrap">
+                <div class="text-block-53">Вам также может понравиться</div>
+            </div>
+
+            {% if related_products %}
+                <div class="w-layout-grid more-product-grid">
+                    {% for p in related_products %}
+                        <div class="product-1">
+                            <a href="{% url 'shop:product-detail' p.slug %}" class="img-product-1 w-inline-block">
+                                {% if p.image %}
+                                    <img src="{{ p.image.url }}" loading="lazy" alt="{{ p.name }}">
+                                {% else %}
+                                    <img src="{% static 'images/placeholder.jpg' %}" loading="lazy" alt="{{ p.name }}">
+                                {% endif %}
+                            </a>
+
+                            <div class="info-product-1">
+                                <div class="about-product-1">
+                                    <div class="text-block-73">{{ p.name }}</div>
+                                    <div class="text-block-74">{{ p.price_byn }} BYN</div>
+                                </div>
+                                <div class="cart-product-1">
+                                    <a href="#" class="add-product-link-wrap-1 w-inline-block"
+                                       data-product-id="{{ p.id }}">
+                                        <img src="{% static 'images/cartblack.svg' %}" loading="lazy" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        // CSRF из cookie
+        function getCookie(name) {
+            var parts = ('; ' + document.cookie).split('; ' + name + '=');
+            if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+        }
+
+        var CSRF = getCookie('csrftoken');
+
+        // Счётчик qty (главная кнопка)
+        var qtyEl = document.getElementById('qty-value');
+        var minus = document.getElementById('qty-minus');
+        var plus = document.getElementById('qty-plus');
+
+        function getQty() {
+            var txt = qtyEl ? qtyEl.textContent : '1';
+            var n = parseInt(txt, 10);
+            if (isNaN(n)) n = 1;
+            if (n < 1) n = 1;
+            if (n > 99) n = 99;
+            return n;
+        }
+
+        if (minus) minus.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (qtyEl) qtyEl.textContent = Math.max(1, getQty() - 1);
+        });
+        if (plus) plus.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (qtyEl) qtyEl.textContent = Math.min(99, getQty() + 1);
+        });
+
+        // Эффекты
+        function flashMainBtn() {
+            var btn = document.querySelector('.product-info-about-4 .add-product-link-wrap-1');
+            if (!btn) return;
+            btn.classList.remove('flash');
+            void btn.offsetWidth;
+            btn.classList.add('flash');
+            btn.addEventListener('animationend', function () {
+                btn.classList.remove('flash');
+            }, {once: true});
+        }
+
+        function pingIcon(el) {
+            if (!el) return;
+            el.classList.add('ping');
+            setTimeout(function () {
+                el.classList.remove('ping');
+            }, 600);
+        }
+
+        // API
+        function addToCart(productId, qty) {
+            return fetch("{% url 'shop:cart_add' %}", {
+                method: 'POST',
+                headers: {'X-CSRFToken': CSRF, 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+                body: new URLSearchParams({product_id: String(productId), qty: String(qty || 1)})
+            })
+                .then(function (resp) {
+                    if (!resp.ok) throw new Error('network');
+                    return resp.json();
+                })
+                .then(function (data) {
+                    if (!data || !data.ok) throw new Error('server');
+
+                    var badge = document.querySelector('[data-role="cart-count"], #cart-counter');
+                    if (badge && typeof data.count !== 'undefined') {
+                        badge.textContent = data.count;
+                        badge.style.display = data.count > 0 ? '' : 'none';
+                    }
+
+                    if (window.CartMini && typeof window.CartMini.refresh === 'function') window.CartMini.refresh();
+                    if (typeof window.cartPing === 'function') window.cartPing();
+                    return data;
+                });
+        }
+
+        // Делегированный клик по всем .add-product-link-wrap-1
+        document.addEventListener('click', function (e) {
+            var btn = e.target && e.target.closest ? e.target.closest('.add-product-link-wrap-1[data-product-id]') : null;
+            if (!btn) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (btn.getAttribute('data-busy') === '1') return;
+            btn.setAttribute('data-busy', '1');
+
+            var productId = btn.getAttribute('data-product-id');
+            if (!productId) {
+                btn.setAttribute('data-busy', '0');
+                return;
+            }
+
+            btn.classList.add('adding');
+
+            var isMainAddButton = !!(btn.closest && btn.closest('.product-info-about-4'));
+            var qty = isMainAddButton ? getQty() : 1;
+
+            addToCart(productId, qty)
+                .then(function () {
+                    if (isMainAddButton) {
+                        flashMainBtn();
+                    } else {
+                        pingIcon(btn);
+                    }
+                })
+                .catch(console.error)
+                .finally(function () {
+                    btn.classList.remove('adding');
+                    btn.setAttribute('data-busy', '0');
+                });
+        });
+    </script>
+
+{% endblock %}

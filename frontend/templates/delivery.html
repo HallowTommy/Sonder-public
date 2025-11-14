@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cropping %}
+
+{% block title %}Delivery{% endblock %}
+{% block body_class %}body-3 nav-dark{% endblock %}
+
+{% block header_left %}
+  <a href="{% url 'shop:catalog' %}" class="text-block-27">КАТАЛОГ</a>
+{% endblock %}
+
+{% block content %}
+<section class="delivery-section">
+  <div class="delivery-about-block">
+    <div class="da-text-wrap">
+      <div class="text-block-118">{{ delivery.title }}</div>
+
+      {% if delivery.body_text %}
+        <div class="text-block-119 rte">
+          {{ delivery.body_text|safe }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="da-img-wrap">
+      {% if delivery.image_left %}
+        <img src="{% cropped_thumbnail delivery 'image_left_crop' %}" loading="lazy" alt="">
+      {% endif %}
+      {% if delivery.image_right %}
+        <img src="{% cropped_thumbnail delivery 'image_right_crop' %}" loading="lazy" alt="">
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

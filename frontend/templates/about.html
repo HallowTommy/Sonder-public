@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cropping %}
+
+{% block title %}About{% endblock %}
+{% block body_class %}body-3 nav-dark{% endblock %}
+
+{% block header_left %}
+  <a href="{% url 'shop:catalog' %}" class="text-block-27">КАТАЛОГ</a>
+{% endblock %}
+
+{% block content %}
+<section class="about-section">
+  <div class="about-sonder-block">
+    <div id="w-node-_04bfdead-15dc-6ac6-e350-7257b63dc1c3-c162f011" class="asb-wrap-1">
+      <div class="text-block-113">{{ about.title|default:"О НАС" }}</div>
+      <div class="text-block-114">
+        {{ about.intro_text|default:"Sonder - это осознание того, что каждый человек, которого ты встречаешь, живет по-своему яркой и интересной жизнью, наполненной амбициями, друзьями, заботой и рутиной"|linebreaksbr }}
+      </div>
+    </div>
+
+    <div id="w-node-_04bfdead-15dc-6ac6-e350-7257b63dc1c8-c162f011" class="asb-wrap-2">
+      <div id="w-node-_04bfdead-15dc-6ac6-e350-7257b63dc1c9-c162f011" class="asb-img-wrap-1">
+        {% if about.block1_image %}
+          <img src="{% cropped_thumbnail about 'block1_crop' scale=1 %}" loading="lazy" alt="" class="image-14">
+        {% else %}
+          <img src="{% static 'images/Rectangle-167.jpg' %}" loading="lazy" alt="" class="image-14">
+        {% endif %}
+      </div>
+      <div id="w-node-_04bfdead-15dc-6ac6-e350-7257b63dc1cb-c162f011" class="text-block-115">
+        {{ about.block1_text|default:"Sonder наполнит ваш дом значимыми вещами, которые будут радовать вас и ваших близких"|linebreaksbr }}
+      </div>
+    </div>
+
+    <div id="w-node-_04bfdead-15dc-6ac6-e350-7257b63dc1cd-c162f011" class="asb-wrap-3">
+      <div class="asb-img-wrap-2">
+        {% if about.block2_image %}
+          <img src="{% cropped_thumbnail about 'block2_crop' scale=1 %}" loading="lazy" alt="" class="image-15">
+        {% else %}
+          <img src="{% static 'images/Rectangle-166.jpg' %}" loading="lazy" alt="" class="image-15">
+        {% endif %}
+      </div>
+      <div class="text-block-116">
+        {{ about.block2_text|default:"Керамика Sonder воплощает идею в предметах для дома. Каждый элемент, создан вручную, вдохновлен природой и несет в себе индивидуальность"|linebreaksbr }}
+      </div>
+    </div>
+
+    <div id="w-node-_04bfdead-15dc-6ac6-e350-7257b63dc1d2-c162f011" class="asb-wrap-4">
+      <div class="asb-img-wrap-3">
+        {% if about.block3_image %}
+          <img src="{% cropped_thumbnail about 'block3_crop' scale=1 %}" loading="lazy" alt="" class="image-16">
+        {% else %}
+          <img src="{% static 'images/Rectangle-169.jpg' %}" loading="lazy" alt="" class="image-16">
+        {% endif %}
+      </div>
+      <div class="text-block-117">
+        {{ about.block3_text|default:"Изделия, сделанные руками, хранят прикосновения. Каждая форма вылеплена вручную, поэтому изделия могут отличаться друг от друга, но быть по-своему прекрасны в своей неидеальности"|linebreaksbr }}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

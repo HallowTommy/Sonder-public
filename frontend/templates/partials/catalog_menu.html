@@ -1,0 +1,55 @@
+{# templates/partials/catalog_menu.html #}
+{% load static %}
+
+<div id="mnav" class="mobile-menu" aria-hidden="true" hidden>
+  <div class="mnav-panel" role="dialog" aria-modal="true" aria-labelledby="mnav-title">
+    <header class="mnav-header">
+      <a href="{% url 'shop:home' %}" class="mnav-logo" id="mnav-title">Категории</a>
+      <button class="mnav-close js-mnav-close" type="button" aria-label="Закрыть меню">
+        <span class="mnav-x" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <nav class="mnav-body" id="mnav-scroll">
+      <ul class="mnav-list">
+
+        {# Опционально: Новинки отдельным пунктом #}
+        <li class="mnav-section">
+          <a class="mnav-link" href="{% url 'shop:catalog' %}?section=new">
+            <span class="mnav-sec-title">НОВИНКИ</span>
+          </a>
+        </li>
+        <li class="mnav-divider" role="presentation"></li>
+
+        {% for sec in menu_sections %}
+          <li class="mnav-section">
+            {% if sec.children %}
+              <button class="mnav-acc js-mnav-acc" type="button" aria-expanded="false" aria-controls="sec-{{ sec.slug }}">
+                <span class="mnav-sec-title">{{ sec.name }}</span>
+                <span class="mnav-caret" aria-hidden="true"></span>
+              </button>
+              <ul class="mnav-sub" id="sec-{{ sec.slug }}" hidden>
+                <li><a href="{% url 'shop:catalog' %}?section={{ sec.slug }}">Все</a></li>
+                {% for child in sec.children %}
+                  <li>
+                    <a href="{% url 'shop:catalog' %}?section={{ sec.slug }}&category={{ child.slug }}">
+                      {{ child.name }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <a class="mnav-link" href="{% url 'shop:catalog' %}?section={{ sec.slug }}">
+                <span class="mnav-sec-title">{{ sec.name }}</span>
+              </a>
+            {% endif %}
+          </li>
+          {% if not forloop.last %}<li class="mnav-divider" role="presentation"></li>{% endif %}
+        {% endfor %}
+
+      </ul>
+    </nav>
+  </div>
+
+  <button class="mnav-backdrop js-mnav-close" type="button" aria-hidden="true"></button>
+</div>

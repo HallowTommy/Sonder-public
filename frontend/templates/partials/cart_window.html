@@ -1,0 +1,33 @@
+{% load static %}
+<section id="Cart-Window"
+         class="cart-window"
+         style="display:none"
+         data-cart-summary-url="{% url 'shop:cart_summary' %}"
+         data-cart-update-url="{% url 'shop:cart_update' %}"
+         data-icon-minus="{% static 'images/button-minus.svg' %}"
+         data-icon-plus="{% static 'images/button-plus.svg' %}"
+         data-icon-close="{% static 'images/Vector.svg' %}"
+         data-placeholder-img="{% static 'images/placeholder.jpg' %}"
+         data-icon-cart-add="{% static 'images/cartAdd.svg' %}">
+  <div class="shadow-on-cart" data-close="cart">
+    <div class="cart-block" onclick="event.stopPropagation()">
+      <div class="cart-section">
+        <div class="cross-wrap-cart">
+          <a href="#" class="close-cross-wrap-cart w-inline-block" data-close="cart">
+            <img src="{% static 'images/iconamoon_close-thin.svg' %}" loading="lazy" alt="">
+          </a>
+        </div>
+
+        <div class="cart-info-wrap">
+          <div class="text-block-54">Ваш заказ</div>
+
+          <div class="product-line-wrap" id="cart-lines-mini"><!-- JS заполняет --></div>
+
+          <div class="just-line-2"></div>
+          <div class="text-block-91">Сумма:&nbsp;<span id="cart-total-mini">0</span>&nbsp;BYN</div>
+          <a href="{% url 'shop:checkout' %}" class="button w-button">ОФОРМИТЬ ЗАКАЗ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,35 @@
+{% load static %}
+<section id="Search-Window"
+         class="search-window"
+         style="display:none"
+         data-search-url="{% url 'shop:search_api' %}"
+         data-placeholder-img="{% static 'images/placeholder.jpg' %}">
+  <div class="shadow-on-search"><!-- БЕЗ data-close! тень не закрывает -->
+    <div class="search-block" onclick="event.stopPropagation()">
+      <div class="search-section">
+        <div class="cross-wrap">
+          <a href="#" class="cross-link-wrap w-inline-block" data-close="search">
+            <img src="{% static 'images/iconamoon_close-thin.svg' %}" loading="lazy" alt="">
+          </a>
+        </div>
+
+        <div class="search-string">
+          <div class="linse-wrap">
+            <img src="{% static 'images/Group-35.svg' %}" loading="lazy" alt="">
+          </div>
+          <div class="search-area">
+            <!-- свой класс, без webflow-декора -->
+            <input id="search-input"
+                   type="text"
+                   class="search-min-input"
+                   placeholder="Начните вводить название"
+                   autocomplete="off"
+                   maxlength="80">
+          </div>
+        </div>
+
+        <div class="search-results" id="search-results"></div>
+      </div>
+    </div>
+  </div>
+</section>
